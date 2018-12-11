@@ -7,6 +7,7 @@ class Purchase_order extends CI_Controller {
     $this->load->model('M_Purchaseorder');
      $this->load->model('Mastermodel');
     $this->load->helper('nominal');
+    $this->load->helper('format_tanggal');
   }
   public function index() 
   {     
@@ -57,6 +58,68 @@ $key++;
        echo "hasil kosong";
 }
 }
+public function purchase_order_simpan(){
+  $data= array('success' => false, 'messages' =>array());
+  if(! empty($_POST['kode']))
+  {
+$total = 0;
+          foreach($_POST['kode'] as $k)
+          {
+            if( ! empty($k)){ $total++; }
+          }
+
+          if($total > 0){
+         $this->load->library('form_validation');                
+        $this->form_validation->set_rules('no_po', 'Nomor Po', 'trim|required');    
+        $this->form_validation->set_rules('vendor', 'Nama Vendor', 'trim|required');  
+        $this->form_validation->set_rules('TotalSubtotalhidden', 'Nama Barang', 'trim|required');      
+        $this->form_validation->set_error_delimiters('<span class="help-block help-block-error"><span class="text-danger">', '</spa></span>');
+        $this->form_validation->set_message('required','%s harus diisi !');
+        $tgl_po=shortdate_uki($this->input->post('tanggal_po'));
+        $no_po=no_po($this->input->post('no_po'),$this->input->post('tanggal_po'));
+              if  ($this->form_validation->run()) {             
+                $data = array (
+            'kode_pr' => $_POST['no_request'],
+            'kode_po' => $this->input->post('no_po'),
+            'tgl_po'  => $tgl_po,
+            'tunai'   => $tunai,
+            'uang_muka' =>$uang_muka,
+            'modiby'  =>$this->session->userdata('user_id'),
+            'modidate' => date('Y-m-d H:i:s'),
+            'keterangan' => $this->input->post('keterangan'),
+                      'modidate'=> date('Y-m-d H:i:s'),
+                      'modiby' => $this->session->userdata('user_id')           
+                );
+                 $this->db->insert('request_order',$data);
+            $no_array = 0;
+           foreach($_POST['kode'] as $k)
+                  {
+                    if( ! empty($k))
+                    {
+                      $data = array (
+            'kode_po' =>  $kode,
+            'kode_barang' => $_POST['kode_barang'][$no_array],            
+            'satuan' =>  $_POST['satuan'][$no_array],
+            'qty' => $_POST['jumlah_beli'][$no_array],
+            'harga'=>$_POST['harga'][$no_array]           
+          );
+        $this->db->insert('tb_detail_po',$data);
+                       
+                    }
+                    $no_array++;
+                  }
+                      $data['success'] = true;
+              }else{
+                 foreach ($_POST as $key => $value) {
+                       $data['messages'][$key] = form_error($key);
+                     }
+              }
+               echo json_encode($data);
+          }
+
+  }
+
+}
   public function server_side() 
   {  
         $from = $this->input->post('from');
@@ -100,23 +163,7 @@ $key++;
         echo json_encode($output);
   }
 
-  public function simpan_po(){
-      $this->load->library('form_validation');                
-        $this->form_validation->set_rules('no_po', 'Nomor Po', 'trim|required');    
-        $this->form_validation->set_rules('vendor', 'Nama Vendor', 'trim|required');  
-         $this->form_validation->set_rules('TotalSubtotalhidden', 'Nama Barang', 'trim|required');      
-        $this->form_validation->set_error_delimiters('<span class="help-block help-block-error"><span class="text-danger">', '</spa></span>');
-              $this->form_validation->set_message('required','%s harus diisi !');
-
-              if($this->form_validation->run()) { 
-                      $data['success'] = true;
-              }else{
-                 foreach ($_POST as $key => $value) {
-                       $data['messages'][$key] = form_error($key);
-                     }
-              }
-               echo json_encode($data);
-  }
+ 
 
 
 
