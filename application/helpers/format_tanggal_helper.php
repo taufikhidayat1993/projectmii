@@ -20,9 +20,9 @@
         function no_po($no_po,$tanggal)
         {
             $pisah = explode("/",$tanggal);        
-            $bulan = romawi_bulan($pecah[1]);
+            $bulan = romawi_bulan($pisah[1]);
             $tahun = $pecah[0];
-            return 'PO/'.$no_po.'/MII/'.$bulan.'/'.$pecah[2];
+            return 'PO/'.$no_po.'/MII/'.$bulan.'/'.substr($pisah[2],-2);
         }
     }
         

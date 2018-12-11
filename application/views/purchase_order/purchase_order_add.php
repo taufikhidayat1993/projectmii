@@ -2,10 +2,11 @@
 <div class="page-bar">
   <?php echo $this->breadcrumb->show() ?>                     
 					   </div>
+                <form class="form-horizontal" id="form_add_pelanggan" action="<?php echo site_url('header/header_add'); ?>" method="post">
 					      <div class="row">
 
                                                                <div class="portlet-body form">
-                                                                <form class="form-horizontal" id="form_add_pelanggan" action="<?php echo site_url('header/header_add'); ?>" method="post">
+                                                             
                                                                      <div class="form-body">
                                                           <div class="col-md-6 ">
                                                             <div class="form-group">
@@ -70,19 +71,21 @@
                                                         </label>
                                                     </div>
                                                                 </div>
+                                                               <input type="hidden" value="1" name="val_tunai" id="val_tunai"  />
                                                             </div>
                                                              <div class="form-group" id="jatuhtempo" style="display: none;">
                                                                 <label class="col-md-3 control-label">Jatuh Tempo</label>
                                                                 <div class="col-md-9">
                                                                 <input type="text" id="tgl_jatuhtempo" name="nama_header" class="form-control dp"
                                                                  data-date-format="dd/mm/yyyy"
-                                                                 autocomplete="off" placeholder="Enter text">   
+
+                                                                 autocomplete="off" value="<?php echo date('d/m/Y');?>">   
                                                                 </div>
                                                             </div>
                                                            </div>
                                                         </div>
                                                         
-                                                        </form>
+                                                     
                                                     </div>
                                                   </div>
 					   <div class='row'>
@@ -108,6 +111,7 @@
 						</thead>
 
 						<tbody id="data_request">
+
 						</tbody>
 						
 					</table>
@@ -116,18 +120,19 @@
 					</div></div>
 					 <div class="form-actions right">
 						<button id='BarisBaru' class='btn btn-default pull-left'><i class='fa fa-plus fa-fw'></i> Baris Baru (F7)</button>
-						
+						  
 					</div></div></div></div>
 				
 
 				</div>
+         </form>
 				 <div class='row'>
 				 
 				 <div class='col-md-12'>
 				   <div class='portlet light'>
                                     <div class='portlet-body form'>
 									
-									<form action="<?php echo base_url();?>purchases/purchase_request_simpan" class="form-horizontal"  method="post" id="form_sample_1"  accept-charset="utf-8">
+									<form action="<?php echo base_url();?>purchase_order/purchase_order_simpan" class="form-horizontal"  method="post" id="form_sample_1"  accept-charset="utf-8">
 									<div class='form-body'>
 									<div class="row">
 									 <div class='col-md-6'>
@@ -231,6 +236,8 @@ $(document).on('click', '#cari_request, #Editheader', function(e){
 });	
 $(document).on('click', '#get_request, #Editheader', function(e){
 	 e.preventDefault();	
+   var arr = $(this).attr('href').split("/");
+   $("#no_request").val(""+arr[6]+"");
  $('#data_request').load($(this).attr('href'));
 });
  $('.select2').select2({
@@ -258,8 +265,10 @@ $(document).on('click', '#get_request, #Editheader', function(e){
                 $("#jatuhtempo").hide();
                 $("#uangmuka").hide();
 				document.getElementById("jatuhtempo").disabled = false;
+            $("#val_tunai").val(1);
                
             } else {
+               $("#val_tunai").val(0);
                 $("#jatuhtempo").show();
                $("#uangmuka").show();
             }
@@ -273,13 +282,13 @@ function BarisBaru()
      	Baris += "<td>"+Nomor+"</td>";
 		
 		Baris += "<td>";
-			Baris += " <input type='text' class='form-control' name='kode_barang[]' id='kode_barang' placeholder='Ketik Kode / Nama Barang'></div>";
+			Baris += " <input type='text' class='form-control' name='uji' id='kode_barang' placeholder='Ketik Kode / Nama Barang'></div>";
 			Baris += "<div id='hasil_pencarian'>";
 		Baris += "</td>";
       Baris += "<td><input type='text' class='form-control input-xsmall ' name='kode[]' id='kode' readonly></td>";
       Baris += "<td><input type='text' class='form-control input-xsmall' id='jumlah_request' name='jumlah_request[]' onkeypress='return check_int(event)' ></td>";
 	  Baris += "<td><input type='text' class='form-control input-xsmall' id='jumlah_order' name='jumlah_order[]' onkeypress='return check_int(event)' ></td>";
-				Baris += "<td><span></span></td>";
+				Baris += "<td><input type='text' class='form-control input-xsmall'  name='satuan[]'><span></span></td>";
 	  Baris += "<td><input type='text' class='form-control input-xsmall' id='harga' name='harga[]' onkeypress='return check_int(event)' ></td>";
 				Baris += "<td><span></span><input type='hidden' class='form-control input-xsmall' id='subtotal' name='subtotal[]' onkeypress='return check_int(event)' ></td>";
 	  Baris += "<td><button class='btn btn-default' id='HapusBaris'><i class='fa fa-times' style='color:red;'></i></button></td>";
@@ -387,6 +396,7 @@ var Field = $('#TabelTransaksi tbody tr:eq('+$(this).parent().parent().index()+'
 Field.find('div#hasil_pencarian').hide();
 Field.find('input').val(NamaBarang);
 	$('#TabelTransaksi tbody tr:eq('+$(this).parent().parent().index()+') td:nth-child(6) span').html(satuan);
+  $('#TabelTransaksi tbody tr:eq('+$(this).parent().parent().index()+') td:nth-child(6) input').val(satuan);
 	$('#TabelTransaksi tbody tr:eq('+$(this).parent().parent().index()+') td:nth-child(3) input').val(kodenya);
 var IndexIni = $(this).parent().parent().index() + 1;
 var TotalIndex = $('#TabelTransaksi tbody tr').length;	
@@ -421,6 +431,8 @@ $(document).on('click', '#daftar-autocomplete li', function(){
 
 $('#TabelTransaksi tbody tr:eq('+Indexnya+') td:nth-child(2)').find('div#hasil_pencarian').hide();
 $('#TabelTransaksi tbody tr:eq('+Indexnya+') td:nth-child(3) input').val(kodenya);
+$('#TabelTransaksi tbody tr:eq('+Indexnya+') td:nth-child(6) input').val($(this).find('span#satuan').html());
+
 $('#TabelTransaksi tbody tr:eq('+Indexnya+') td:nth-child(5) span').html($(this).find('span#satuan').html());
 	var IndexIni = Indexnya + 1;
 	var TotalIndex = $('#TabelTransaksi tbody tr').length;
@@ -508,18 +520,18 @@ if($('#ppn').val() >0 ) {
 	$('#TotalBayar').html(to_rupiah(Totalnya));
 	$('#TotalBayarHidden').val(Totalnya);
 	$('#TotalSubtotal').html(to_rupiah(Total));
-	$('#TotalSubtotalHidden').val(Total);
+	$('#TotalSubtotalhidden').val(Total);
 
 }
 function SimpanTransaksi()
 {
 	
-	var 
-
-	FormData =$('#form_add_pelanggan').serialize();
-	FormData +="&"+$('#form_sample_1').serialize();		
+	var FormData =$('#form_add_pelanggan').serialize();
+    FormData +="&"+$('#TabelTransaksi tbody').serialize();  
+	    FormData +="&"+$('#form_sample_1').serialize();		
+     
 	$.ajax({
-		url: "<?php echo site_url('purchase_order/simpan_po'); ?>",
+		url: "<?php echo site_url('purchase_order/purchase_order_simpan'); ?>",
 		type: "POST",
 		cache: false,
 		data: FormData,
@@ -548,46 +560,7 @@ function SimpanTransaksi()
 }
 
 
-  $('#form_sample_1').submit(function(e){
-    e.preventDefault();
-     var fa = $(this);
-	 FormData = fa.serialize();
-FormData += "&" + $('#TabelTransaksi tbody input').serialize();
-      $.ajax({
-        url: fa.attr('action'),
-        type: 'post' ,
-        data:  FormData,
-        dataType: 'json',
-        success: function(response) {
-          if(response.success == true) {
-            $('#info').append('<div class="alert alert-success">' + 
-              'Data Tersimpan' + '</div>');
-            $('.form-group').removeClass('has-error')
-                            .removeClass('has-success');
-            $('.text-danger').remove();
-            fa[0].reset();
 
-            $('.alert-success').delay(500).show(10, function() {
-                $(this).delay(3000).hide(10, function() {
-                    $(this).remove();
-                });
-            })
-
-          } else {
-            $.each(response.messages,function(key, value){
-              var element = $('#' + key);
-              element.closest('div.form-group')
-              .removeClass('has-error')
-              .addClass(value.length > 0 ? 'has-error' : 'has-success')
-              .find('.text-danger')
-              .remove();
-              element.after(value);
-            });
-          }
-        }
-     });
-
-  });
   function Pilih(no,val)
 {
 

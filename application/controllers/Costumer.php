@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Costumer1 extends CI_Controller {
+class Costumer extends CI_Controller {
     Public function __construct() { 
         parent::__construct(); 
         $this->load->model('costumermodel','', TRUE);
