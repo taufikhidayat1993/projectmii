@@ -56,7 +56,7 @@
                                                     <th>Kode Barang</th>
                                                     <th>Nama Barang</th>
                                                     <th>Satuan</th>
-                                                    <th>Kategori</th>  
+                                            
                                                     <th>Account</th>                                                
                                                    <th width="10%">ACTION</th>
                                                 </tr>

@@ -23,6 +23,7 @@
 						<tr class='w3-blue'>
 							<th>#</th>
 							<th>BARANG</th>
+							<th>Kode Barang</th>
 							<th>JUMLAH</th>
 							<th>SATUAN</th>
 							<th>OPSI</th>
@@ -120,17 +121,11 @@ function BarisBaru()
 			Baris += " <input type='text' class='form-control' name='kode_barang[]' id='kode_barang' placeholder='Ketik Kode / Nama Barang'></div>";
 			Baris += "<div id='hasil_pencarian'>";
 		Baris += "</td>";
+Baris += "<td><input type='text' class='form-control input-small' id='kode' name='kode[]' readonly  ></td>";
 
-		Baris += "<td><input type='text' class='form-control' id='jumlah_beli' name='jumlah_beli[]' onkeypress='return check_int(event)' ></td>";
+		Baris += "<td><input type='text' class='form-control input-xsmall' id='jumlah_beli' name='jumlah_beli[]' onkeypress='return check_int(event)' ></td>";
 
-		Baris += "<td><select name='id_satuan[]' class='form-control' id='id_satuan' onchange='Pilih("+Nomor+",value)' ><option value=''>Pilih Satuan</option>";
-		<?php
-		foreach($user as $u) { ?>
-		Baris += "<option value='<?php echo $u->nama_satuan; ?>'><?php echo $u->nama_satuan; ?></option>";
-		<?php
-		}
-		?>
-		Baris += "</select><input type='hidden' id='satuan"+Nomor+"' name='satuan[]'></td>";
+		Baris += "<td><input type='hidden'  name='satuan[]'><span></span></td>";
 		Baris += "<td><button class='btn btn-default' id='HapusBaris'><i class='fa fa-times' style='color:red;'></i></button></td>";
 		Baris += "</tr>";
 
@@ -230,11 +225,19 @@ $(document).on('keydown', '#kode_barang', function(e){
 		}
 			else if(charCode == 13)
 		{
+var Field = $('#TabelTransaksi tbody tr:eq('+$(this).parent().parent().index()+') td:nth-child(2)');	
 
-	var Indexnya   = $(this).parent().parent().parent().parent().index();
-	var NamaBarang = $(this).find('span#barangnya').html();
+	var NamaBarang = Field.find('span#barangnya').html();
+		var kodenya = Field.find('span#kodenya').html();
 	var Harganya   = $(this).find('span#harganya').html();
-    $('#TabelTransaksi tbody tr:eq('+Indexnya+') td:nth-child(2)').find('div#hasil_pencarian').hide();
+	 var nama_satuan = Field.find('span#nama_satuan').html();
+    var satuan = Field.find('span#satuan_id').html();
+    Field.find('input').val(NamaBarang);
+    $('#TabelTransaksi tbody tr:eq('+$(this).parent().parent().index()+') td:nth-child(2)').find('div#hasil_pencarian').hide();
+    	$('#TabelTransaksi tbody tr:eq('+$(this).parent().parent().index()+') td:nth-child(5) span').html(nama_satuan);
+	$('#TabelTransaksi tbody tr:eq('+$(this).parent().parent().index()+') td:nth-child(5) input').val(satuan);
+	$('#TabelTransaksi tbody tr:eq('+$(this).parent().parent().index()+') td:nth-child(3) input').val(kodenya);
+		var Indexnya   = $(this).parent().parent().parent().parent().index();
 	var IndexIni = Indexnya + 1;
 	var TotalIndex = $('#TabelTransaksi tbody tr').length;
 	if(IndexIni == TotalIndex){
@@ -263,13 +266,17 @@ $(document).on('keydown', '#kode_barang', function(e){
 });
 
 $(document).on('click', '#daftar-autocomplete li', function(){
-	$(this).parent().parent().parent().find('input').val($(this).find('span#barangnya').html());
-	
+	$(this).parent().parent().parent().find('input').val($(this).find('span#barangnya').html());	
 	var Indexnya = $(this).parent().parent().parent().parent().index();
 	var NamaBarang = $(this).find('span#barangnya').html();
 	var Harganya = $(this).find('span#harganya').html();
-$('#TabelTransaksi tbody tr:eq('+Indexnya+') td:nth-child(2)').find('div#hasil_pencarian').hide();
-
+    var kodenya = $(this).find('span#kodenya').html();
+    var nama_satuan = $(this).find('span#nama_satuan').html();
+    var satuan = $(this).find('span#satuan_id').html();
+    $('#TabelTransaksi tbody tr:eq('+Indexnya+') td:nth-child(2)').find('div#hasil_pencarian').hide();
+	$('#TabelTransaksi tbody tr:eq('+Indexnya+') td:nth-child(3) input').val(kodenya);
+	$('#TabelTransaksi tbody tr:eq('+Indexnya+') td:nth-child(5) span').html(nama_satuan);
+	$('#TabelTransaksi tbody tr:eq('+Indexnya+') td:nth-child(5) input').val(satuan);
 	var IndexIni = Indexnya + 1;
 	var TotalIndex = $('#TabelTransaksi tbody tr').length;
 	if(IndexIni == TotalIndex){

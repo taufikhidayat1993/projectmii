@@ -25,9 +25,7 @@ class Purchases extends CI_Controller {
 	
     	public function purchase_request_add()
 	{
-		
-	
-		 $this->load->library('breadcrumb');
+  $this->load->library('breadcrumb');
   $this->breadcrumb->add('Purchases','')
             ->add('Purchases Request','purchase_request')
             ->add('Add New Purchase Request','purchase_request/purchase_request_add');
@@ -75,6 +73,7 @@ if( ! empty($_POST['kode_barang']))
 										{
 										  $data = array (
 					  'kode_pr' =>  $kode_pr,
+					   'kode_barang' => $_POST['kode'][$no_array],
 					  'nama_barang' => $_POST['kode_barang'][$no_array],					  
 					  'satuan' =>  $_POST['satuan'][$no_array],
   'qty' => $_POST['jumlah_beli'][$no_array]					  

@@ -33,10 +33,10 @@ class Penjualan extends CI_Controller
 				{
 					$json['datanya'] .= "
 						<li>
-							<b>Kode</b> : 
-							<span id='kodenya'>".$b->kode_barang."</span> <br />
+							<span id='kodenya'>".$b->kode_barang."</span>:
 							<span id='barangnya'>".$b->nama_barang."</span>
-							<span id='satuan' >".$b->satuan."</span>
+							<span id='nama_satuan' style='display:none;'>".$b->nama_satuan."</span>
+							<span id='satuan_id' style='display:none;'>".$b->satuan."</span>
 							
 						</li>
 					";

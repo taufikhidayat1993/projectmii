@@ -21,7 +21,7 @@
         {
             $pisah = explode("/",$tanggal);        
             $bulan = romawi_bulan($pisah[1]);
-            $tahun = $pecah[0];
+            
             return 'PO/'.$no_po.'/MII/'.$bulan.'/'.substr($pisah[2],-2);
         }
     }

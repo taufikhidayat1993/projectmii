@@ -7,11 +7,12 @@ class M_purchaseorder extends CI_Model
         parent::__construct();  // call model constructor    
     }
 function list_request(){
+    $query = $this->db->where('status',1);
 return $this->db->get('request_order');
 }
 function detail_request($no_request){
 
-     $query = $this->db->query("select tb_barang.nama_barang,tb_barang.satuan,detail_request_order.* from detail_request_order left join tb_barang on tb_barang.kode_barang=detail_request_order.kode_barang where 
+     $query = $this->db->query("select tb_barang.nama_barang,tb_barang.kode_account,tb_barang.satuan,detail_request_order.* from detail_request_order left join tb_barang on tb_barang.kode_barang=detail_request_order.kode_barang where 
         detail_request_order.kode_pr='".$no_request."'");        
      return $query->result();
 }
@@ -58,39 +59,6 @@ function detail_request($no_request){
 
             $this->db->where('tb_po.tgl_po BETWEEN "'. date('Y-m-d', strtotime($from)). '" and "'. date('Y-m-d', strtotime($to)).'"');
         }
-/*
- $i = 0;
-        foreach ($this->column_search as $item) // loop column
-        {
-            if($_POST['search']['value']) // if datatable send POST for search
-            {
-                if($i===0) // first loop
-                {
-                    $this->db->group_start(); // open bracket. query Where with OR clause better with bracket. because maybe can combine with other WHERE with AND.
-                    $this->db->like($item, $_POST['search']['value']);
-                }
-                else
-                {
-                    $this->db->or_like($item, $_POST['search']['value']);
-                }
-                if(count($this->column_search) - 1 == $i) //last loop
-                    $this->db->group_end(); //close bracket
-            }
-            $i++;
-        }
-*/
-    //    if(isset($_POST['order'])) // here order processing
-    //    {
-     //       $this->db->order_by($this->column_order[$_POST['order']['0']['column']], $_POST['order']['0']['dir']);
-
-      //  }
-    //    elseif (isset($this->order)) // default order processing
-     //   {
-       //     $order = $this->order;
-
-      //      $this->db->order_by(key($order), $order[key($order)]);
-
-      //  }
     }
 	  public function detail_pr($kode)
     {
@@ -98,23 +66,22 @@ function detail_request($no_request){
         return $hasil->result();
 	}
  public function buat_kode()   {
-		  $this->db->select('RIGHT(kode_pr,4) as kode', FALSE);
-		  $this->db->where('YEAR(tgl_pr)', date('Y'));
+		  $this->db->select('RIGHT(no_po,3) as kode', FALSE);
+		  $this->db->where('YEAR(tgl_po)', date('Y'));
 		  $this->db->limit(1);    
-		  $query = $this->db->get('request_order'); 	
+          $this->db->order_by("no_po", "desc"); 
+		  $query = $this->db->get('tb_po'); 
+
 		  //cek dulu apakah ada sudah ada kode di tabel.    
-		  if($query->num_rows() <> 0){      
-		   //jika kode ternyata sudah ada.      
+		  if($query->num_rows() <> 0){       
 		   $data = $query->row();      
 		   $kode = intval($data->kode) + 1;    
 		  }
 		  else {      
-		   //jika kode belum ada      
 		   $kode = 1;    
 		  }
-		  $kodemax = str_pad($kode, 4, "0", STR_PAD_LEFT); // angka 4 menunjukkan jumlah digit angka 0
-		  $kodejadi = date('Y').''.$kodemax;    // hasilnya ODJ-9921-0001 dst.
-		  return $kodejadi;  
+		  $kodemax = str_pad($kode,3,"0",STR_PAD_LEFT); // angka 4 menunjukkan jumlah digit angka 0
+		  return $kodemax;  
 	}
 	function tambah_pr($kode_pr,$nama_barang,$jumlah,$satuan)
 	{

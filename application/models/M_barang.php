@@ -146,9 +146,9 @@ class M_barang extends CI_Model
 
 		$sql = "
 			SELECT 
-				`kode_barang`, `nama_barang`,`satuan`
+				`kode_barang`, `nama_barang`,`satuan`,`nama_satuan`
 			FROM 
-				`tb_barang` 
+				tb_barang left join tb_barang_satuan on tb_barang.satuan=tb_barang_satuan.id_satuan
 			WHERE 
 				 ( 
 					`kode_barang` LIKE '%".$this->db->escape_like_str($keyword)."%' 

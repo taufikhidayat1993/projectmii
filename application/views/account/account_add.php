@@ -11,7 +11,7 @@
                                                                   <?php 
                                                                   foreach($list as $row){
                                                                     ?>
-                                                                           <option value="<?php echo $row->headerid; ?>"><?php echo $row->nama_header; ?></option>
+                                                                           <option value="<?php echo $row->kode_header; ?>"><?php echo $row->nama_header; ?></option>
                                                                     <?php
                                                                   } 
                                                                   ?>
@@ -39,7 +39,7 @@
                                                                   </select>
                                                                 </div>
                                                             </div>
-                                                           
+                                                           <button type="submit"value="kirim">
                                                         </div>
                                                         </form>
                                                     </div>

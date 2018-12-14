@@ -27,8 +27,7 @@ class Barang extends CI_Controller {
             $row[] = $post->kode_barang;          
             $row[] = $post->nama_barang;
             $row[] = $post->nama_satuan;
-            $row[] = $post->nama_kategori;
-            $row[] = $post->account;
+            $row[] = $post->nama_account;
             $row[] = "<a href='".site_url('barang/barang_edit/'.$post->id_barang)."' id='Editbarang' class='btn btn-xs blue'><i class='fa fa-edit'></i></a>
                          <a href='".site_url('barang/hapus/'.$post->id_barang)."' id='hapusbarang'class='btn btn-xs red' ><i class='fa fa-trash'></i></a>";
             $data[] = $row;

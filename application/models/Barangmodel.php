@@ -6,7 +6,7 @@ class Barangmodel extends CI_Model
     function __construct() {
         parent::__construct();  // call model constructor    
     }
-    var $table = 'barang'; 
+    var $table = 'tb_barang'; 
  
     var $order = array('nama_barang' => 'asc');
     public function get_datatables($name_barang)
@@ -31,11 +31,10 @@ class Barangmodel extends CI_Model
     private function _get_datatables_query($name_barang)
     {
         $this->db
-             ->select('kode_barang, id_barang, nama_barang,brgsatuan.nama_satuan,nama_kategori')
+             ->select('kode_barang, id_barang, nama_barang,tb_barang_satuan.nama_satuan,nama_account')
              ->from($this->table)
-             ->join('brgsatuan', 'brgsatuan.satuan_id=barang.satuan_id','left')
-			 ->join('brgkategori', 'brgkategori.kategori_id=barang.kategori_id','left')
-			 ->join('account', 'brgkategori.kategori_id=barang.kategori_id','left');
+             ->join('tb_barang_satuan', 'tb_barang_satuan.id_satuan=tb_barang.satuan','left')
+					 ->join('account', 'account.kode_account=tb_barang.kode_account','left');
       
     if($name_barang!='') // To process our custom input parameter
     {

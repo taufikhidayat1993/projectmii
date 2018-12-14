@@ -475,7 +475,8 @@
             <ul class="sub-menu">    
 <li><a class='nav-link' href="<?php echo base_url('group')?>">Group Account</a></li>    
  <li><a class='nav-link' href="<?php echo base_url('header')?>">Header Account</a></li>                 
-  <li><a class='nav-link' href="<?php echo base_url('account')?>">Account</a></li>           
+  <li><a class='nav-link' href="<?php echo base_url('account')?>">Account</a></li>         
+   <li><a class='nav-link' href="<?php echo base_url('jurnal_umum')?>">Jurnal Umum</a></li>           
                         </ul>
                     </li>
                    

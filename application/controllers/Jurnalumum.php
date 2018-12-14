@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Purchase_order extends CI_Controller {
+class Jurnalumum extends CI_Controller {
     Public function __construct() { 
         parent::__construct(); 
     $this->load->model('M_Purchaseorder');

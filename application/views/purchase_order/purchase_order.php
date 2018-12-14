@@ -63,11 +63,13 @@
                                             <thead>
                                                 <tr>
                                                    
-                                                    <th>Tanggal</th>
+                                                    <th>Tg PO</th>
                                                     <th>No. PO</th>
                                                     <th>No. Request</th>
-                                                    <th>Vendor</th>
+                                                    <th>Vendor Name</th>
                                                     <th>Total PO</th>
+                                                    <th>Paid Amount</th>
+                                                    <th>Sisa Payment</th>
                                                    
                                                    <th width="10%">ACTION</th>
                                                 </tr>

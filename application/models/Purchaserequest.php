@@ -96,6 +96,7 @@ class Purchaserequest extends CI_Model
 		  $this->db->select('RIGHT(kode_pr,4) as kode', FALSE);
 		  $this->db->where('YEAR(tgl_pr)', date('Y'));
 		  $this->db->limit(1);    
+    
 		  $query = $this->db->get('request_order'); 	
 		  //cek dulu apakah ada sudah ada kode di tabel.    
 		  if($query->num_rows() <> 0){      

@@ -2,7 +2,7 @@
 <div class="page-bar">
   <?php echo $this->breadcrumb->show() ?>                     
 					   </div>
-                <form class="form-horizontal" id="form_add_pelanggan" action="<?php echo site_url('header/header_add'); ?>" method="post">
+                <form class="form-horizontal" id="form_add_pelanggan" action="<?php echo site_url('purchase_order/purchase_order_simpan'); ?>" method="post">
 					      <div class="row">
 
                                                                <div class="portlet-body form">
@@ -32,7 +32,8 @@
                                                              	PO
                                                              </button>
                                                              </span>
-                                                                    <input type="text"  name="no_po" class="form-control" > 
+                                                              <input type="text"  name="no_po" 
+                                                              value="<?php echo $kode_po; ?>" class="form-control" > 
                                                                    	<span  class="input-group-btn">
                                                                    		<button class="btn btn-primary" type="button">
                                                              	MII/XII/2018
@@ -61,6 +62,7 @@
                                                              </select>
                                                                 </div>
                                                             </div>
+                                                            <!--
                                                              <div class="form-group">
                                                                 <label class="col-md-3 control-label">Tunai</label>
                                                                 <div class="col-md-9">
@@ -73,7 +75,8 @@
                                                                 </div>
                                                                <input type="hidden" value="1" name="val_tunai" id="val_tunai"  />
                                                             </div>
-                                                             <div class="form-group" id="jatuhtempo" style="display: none;">
+                                                          -->
+                                                             <div class="form-group" id="jatuhtempo" >
                                                                 <label class="col-md-3 control-label">Jatuh Tempo</label>
                                                                 <div class="col-md-9">
                                                                 <input type="text" id="tgl_jatuhtempo" name="nama_header" class="form-control dp"
@@ -125,7 +128,7 @@
 				
 
 				</div>
-         </form>
+        
 				 <div class='row'>
 				 
 				 <div class='col-md-12'>
@@ -163,14 +166,16 @@
   
 										
 		<div class='col-md-6'>
+      <!--
          <div class='form-group' id="uangmuka" style="display: none">
             <label class='col-md-3 control-label'>Uang Muka</label>
                 <div class='col-md-9'>													
                   <input type='text'  id="uang_muka" name="uang_muka"  class='form-control'>
          </div>
      </div>
+   -->
         <div class='form-group'>
-                <label class='col-md-3 control-label'>Kas Pembayaran</label>
+                <label class='col-md-3 control-label'>A/P Account</label>
                       <div class='col-md-9'>
                       	<select class="form-control" name="kas_bayar">
      <?php
@@ -179,6 +184,12 @@ foreach($account as $row){
 }
      ?>
       </select>
+            </div>
+        </div>
+        <div class='form-group'>
+                <label class='col-md-3 control-label'>Keterangan</label>
+                      <div class='col-md-9'>
+                       <textarea class="form-control" name="keterangan"></textarea>
             </div>
         </div>
   
@@ -191,13 +202,13 @@ foreach($account as $row){
 											</div>
 											</div>
 										</div>
-									</form>
+									
 					</div>
 				
 					
 				</div>
 			</div>
-		
+		</form>
 			
 
 <script>
@@ -525,7 +536,7 @@ if($('#ppn').val() >0 ) {
 }
 function SimpanTransaksi()
 {
-	
+
 	var FormData =$('#form_add_pelanggan').serialize();
     FormData +="&"+$('#TabelTransaksi tbody').serialize();  
 	    FormData +="&"+$('#form_sample_1').serialize();		

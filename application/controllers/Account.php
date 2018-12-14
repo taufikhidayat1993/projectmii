@@ -104,10 +104,10 @@ public function account_add(){
              $data = array (
                       'nama_account' => $this->input->post('nama_account'),
                       'kode_account' => $this->input->post('kode_account'),
-                      'headerid' => $this->input->post('headerid'),
+                      'kode_header' => $this->input->post('headerid'),
                       'tipe' => $this->input->post('tipe'),
                       'modidate'=> date('Y-m-d H:i:s'),
-                      'modiby' => ""                   
+                      'modiby' => $this->session->userdata('user_id')                   
              );
             $this->accountmodel->insert_all('account',$data);
             $data['success'] = true;
