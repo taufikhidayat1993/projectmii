@@ -136,13 +136,13 @@ public function add_vendor(){
         if($hapus)
         {
           echo json_encode(array(
-            "pesan" => "<font color='green'><i class='fa fa-check'></i> Data berhasil dihapus !</font>
+            "pesan" => " Data berhasil dihapus 
           "));
         }
         else
         {
           echo json_encode(array(
-            "pesan" => "<font color='red'><i class='fa fa-warning'></i> Terjadi kesalahan, coba lagi !</font>
+            "pesan" => "Terjadi kesalahan, coba lagi
           "));
         }
       

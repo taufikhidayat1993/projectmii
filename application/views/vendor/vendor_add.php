@@ -52,17 +52,12 @@ function tambahvendor()
         dataType: 'json',
         success: function(response) {
           if(response.success == true) {
-            $('#info').append('<div class="alert alert-success">' + 'Data Tersimpan' + '</div>');
-         
+          var $toast = toastr['success']('Data Vendor Berhasil Ditambahkan');
             $('.form-group').removeClass('has-error').removeClass('has-success');
             $('.text-danger').remove();
             $('#form_add_pelanggan')[0].reset();
-
-            $('.alert-success').delay(500).show(10, function() {
-                $('#form_add_pelanggan').delay(3000).hide(10, function() {
-                    $('#responsive').remove();
-                });
-            })
+             $('#responsive').modal('hide');
+               
 
           } else {
             $.each(response.messages,function(key, value){
