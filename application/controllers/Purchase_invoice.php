@@ -1,10 +1,10 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Purchase_order extends CI_Controller {
+class Purchase_invoice extends CI_Controller {
     Public function __construct() { 
         parent::__construct(); 
-    $this->load->model('M_Purchaseorder');
+    $this->load->model('M_Purchaseinvoice');
      $this->load->model('Mastermodel');
     $this->load->helper('nominal');
    $this->load->helper('format_tanggal'); 
@@ -12,7 +12,7 @@ class Purchase_order extends CI_Controller {
   public function index() 
   {     
 		$data   = array(
-            'content'   => 'purchase_order/purchase_order'
+            'content'   => 'purchase_invoice/purchase_invoice'
         );
 		$this->load->view('container', $data);
   }
@@ -20,25 +20,27 @@ class Purchase_order extends CI_Controller {
   {     
      $this->load->library('breadcrumb');
        $this->breadcrumb->add('Purchase','')
-            ->add('Purchases Order','purchase_order')
-            ->add('Add New Purchase Order','purchase_order/add');
+            ->add('Purchases Order','purchase_invoice')
+            ->add('Add New Purchase Order','purchase_invoice/add');
     $data   = array(
-            'content'   => 'purchase_order/purchase_order_add',
+            'content'   => 'purchase_invoice/purchase_invoice_add',
             'account'  =>$this->db->query("select * from account where kode_account='2-110'")->result(),
-            'kode_po'  =>  $this->M_Purchaseorder->buat_kode()
+            'kode_po'  =>  $this->M_Purchaseinvoice->buat_kode()
         );
 
     $this->load->view('container', $data);
   }
-    public function list_request() 
+    public function list_po($vendor = NULL) 
   {
-    $data['list'] = $this->M_Purchaseorder->list_request()->result();
-    $this->load->view('purchase_order/list_request',$data);
+if(!empty($vendor)){
+    $data['list'] = $this->M_Purchaseinvoice->list_po($vendor)->result();
+    $this->load->view('purchase_invoice/list_po',$data);
+}
   }
-     public function get_request($no_request) 
+     public function get_po($no_po) 
   {
- $data['list'] = $this->M_Purchaseorder->detail_request($no_request);
-    $this->load->view('purchase_order/data_request',$data);
+ $data['list'] = $this->M_Purchaseinvoice->detail_po($no_po);
+    $this->load->view('purchase_invoice/data_po',$data);
   }
    public function cari_vendor() 
   {
@@ -59,10 +61,10 @@ $key++;
        echo "hasil kosong";
 }
 }
-public function purchase_order_simpan(){
+public function purchase_invoice_simpan(){
 
          $this->load->library('form_validation');                
-        $this->form_validation->set_rules('no_po', 'Nomor Po', 'trim|required');    
+        $this->form_validation->set_rules('no_pi', 'Nomor Po', 'trim|required');    
         $this->form_validation->set_rules('vendor', 'Nama Vendor', 'trim|required');  
         $this->form_validation->set_rules('TotalSubtotalhidden', 'Nama Barang', 'trim|required');      
         $this->form_validation->set_error_delimiters('<span class="help-block help-block-error"><span class="text-danger">', '</spa></span>');
@@ -71,33 +73,31 @@ public function purchase_order_simpan(){
 
 
         
-         
-      if(!empty($_POST['cek_ppn'])){
-$cek=1;
-} else {
-$cek=0;
-}
-        $no_po=no_po($this->input->post('no_po'),$this->input->post('tanggal_po'));
+                if($this->input->post('val_tunai')==0){
+        $tgl_jatuh_tempo=shortdate_uki($this->input->post('jatuh_tempo'));
+      }else{
+         $tgl_jatuh_tempo="";
+      }
+        $no_pi=no_pi($this->input->post('no_pi'),$this->input->post('tanggal_po'));
               if  ($this->form_validation->run()) {
                     
                 $data = array (
             'kode_pr' => $this->input->post('no_request'),
-            'kode_po' => $no_po,
-            'no_po'   => $this->input->post('no_po'),
+            'kode_po' => $no_pi,
+            'no_pi'   => $this->input->post('no_pi'),
             'tgl_po'  => $tgl_po,
            // 'tunai'   => $this->input->post('val_tunai'),
            // 'uang_muka' =>$this->input->post('uang_muka'),
             'kode_vendor' =>$this->input->post('vendor'),
             'keterangan' =>$this->input->post('keterangan'),
-            'ppn' =>$cek,
-            'total_ppn' =>$this->input->post('ppn2'),
+            'jatuh_tempo' =>$tgl_jatuh_tempo,
             'modiby'  =>$this->session->userdata('user_id'),
             'modidate' => date('Y-m-d H:i:s'),
             'total_po' =>  $this->input->post('TotalSubtotalhidden')     
                 );
         $this->db->insert('tb_po',$data);
               $inputakunkredit = array (
-            'source_no' =>  $no_po,
+            'source_no' =>  $no_pi,
             'tanggal'   => $tgl_po,
             'kode_account' => $_POST['kas_bayar'], 
             'keterangan'=>  $_POST['keterangan'],         
@@ -111,7 +111,7 @@ $cek=0;
 
         if($this->input->post('ppn')>0){
  $inputakunppn1 = array (
-            'source_no' =>  $no_po,
+            'source_no' =>  $no_pi,
             'tanggal'   => $tgl_po,
             'kode_account' => '2-130',            
             'debet' =>  $_POST['ppn'],
@@ -121,7 +121,7 @@ $cek=0;
           );
         $this->db->insert('accjurnaldetail',$inputakunppn1); 
          $inputakunppn2 = array (
-            'source_no' =>  $no_po,
+            'source_no' =>  $no_pi,
             'tanggal'   => $tgl_po,
             'kode_account'=> $_POST['kas_bayar'],            
             'kredit' =>  $_POST['ppn'],
@@ -133,12 +133,12 @@ $cek=0;
 
         }
             $no_array = 0;
-           foreach($_POST['kode'] as $k)
+           foreach($_POST['kode_barang'] as $k)
                   {
                     if( ! empty($k))
                     {
-              $dataku1 = array (
-            'source_no' =>  $no_po,
+              $dataku = array (
+            'source_no' =>  $no_pi,
             'tanggal'   => $tgl_po,
             'kode_account' => $_POST['account'][$no_array], 
             'keterangan'=>  $_POST['keterangan'],             
@@ -146,7 +146,7 @@ $cek=0;
             'modiby' => $this->session->userdata('user_id'),
             'modidate' => date('Y-m-d H:i:s')
           );
-        $this->db->insert('accjurnaldetail',$dataku1); 
+        $this->db->insert('accjurnaldetail',$dataku); 
 
 
 /*
@@ -156,14 +156,14 @@ Inner join  account b on a.kode_account = b.kode_account
 Group by b.nama_account, a.source_no, a.kode_account
 Order by b.nama_account, a.source_no, a.kode_account
 */
-         $dataku2 = array (
-            'kode_po' =>  $no_po,
+         $dataku = array (
+            'kode_po' =>  $no_pi,
             'kode_barang' => $_POST['kode'][$no_array],            
             'satuan' =>  $_POST['satuan'][$no_array],
             'qty' => $_POST['jumlah_order'][$no_array],
             'harga'=>$_POST['harga'][$no_array]           
           );
-        $this->db->insert('tb_detail_po',$dataku2);
+        $this->db->insert('tb_detail_po',$dataku);
                    }                        
                     $no_array++;
                   }     
@@ -192,7 +192,7 @@ Order by b.nama_account, a.source_no, a.kode_account
         }
 
        
-        $posts = $this->M_Purchaseorder->get_datatables($from,$to); 
+        $posts = $this->M_Purchaseinvoice->get_datatables($from,$to); 
 
         $data = array();
         $no = $this->input->post('start');
@@ -214,8 +214,8 @@ Order by b.nama_account, a.source_no, a.kode_account
         
         $output = array(
             "draw" => $this->input->post('draw'),
-            "recordsTotal" => $this->M_Purchaseorder->count_all(),
-            "recordsFiltered" => $this->M_Purchaseorder->count_filtered($from,$to),
+            "recordsTotal" => $this->M_Purchaseinvoice->count_all(),
+            "recordsFiltered" => $this->M_Purchaseinvoice->count_filtered($from,$to),
             "data" => $data,
         );
         //output to json format

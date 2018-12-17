@@ -447,7 +447,7 @@
                            <ul class="sub-menu">
                             <li class='nav-item' ><a href="<?php echo base_url('purchases/purchase_request')?>">Purchase Request</a></li>
                             <li><a class='nav-link' href="<?php echo base_url('purchase_order')?>">Purchase Order</a></li>  
-                            <li><a class='nav-link' href="<?php echo base_url('purchases/purchase_invoice')?>">Purchase Invoice</a></li>                            
+                            <li><a class='nav-link' href="<?php echo base_url('purchase_invoice')?>">Purchase Invoice</a></li>                            
                         </ul>
                     </li>
                     <li class="nav-item ">
