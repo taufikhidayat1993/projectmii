@@ -60,13 +60,13 @@
                                             <thead>
                                                 <tr>
                                                    
-                                                    <th>Tg PO</th>
-                                                    <th>No. PO</th>
-                                                    <th>No. Request</th>
-                                                    <th>Vendor Name</th>
-                                                    <th>Total PO</th>
-                                                    <th>Paid Amount</th>
-                                                    <th>Sisa Payment</th>
+                                                    <th>Date</th>
+                                                    <th>Source</th>
+                                                    <th>Source No.</th>
+                                                    <th>Account No</th>
+                                                    <th>Account Name</th>
+                                                    <th>Debet</th>
+                                                    <th>Kredit</th>
                                                    
                                                    <th width="10%">ACTION</th>
                                                 </tr>
@@ -95,7 +95,7 @@
              "defaultContent": ""
          }],
 					"ajax": {
-						"url": "<?php echo base_url('Purchase_order/server_side'); ?>",
+						"url": "<?php echo base_url('Jurnal_umum/server_side'); ?>",
 						"type": "POST",
 						"data":function(data) {
 							data.from = $('#from').val();

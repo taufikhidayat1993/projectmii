@@ -72,14 +72,13 @@ public function purchase_order_simpan(){
 
         
          
-      if(!empty($_POST['cek_ppn'])){
+      if($this->input->post('ppn2') >0){
 $cek=1;
 } else {
 $cek=0;
 }
         $no_po=no_po($this->input->post('no_po'),$this->input->post('tanggal_po'));
-              if  ($this->form_validation->run()) {
-                    
+              if  ($this->form_validation->run()) {                    
                 $data = array (
             'kode_pr' => $this->input->post('no_request'),
             'kode_po' => $no_po,
@@ -96,6 +95,7 @@ $cek=0;
             'total_po' =>  $this->input->post('TotalSubtotalhidden')     
                 );
         $this->db->insert('tb_po',$data);
+/*
               $inputakunkredit = array (
             'source_no' =>  $no_po,
             'tanggal'   => $tgl_po,
@@ -132,11 +132,13 @@ $cek=0;
         $this->db->insert('accjurnaldetail',$inputakunppn2); 
 
         }
+        */
             $no_array = 0;
            foreach($_POST['kode'] as $k)
                   {
                     if( ! empty($k))
                     {
+                      /*
               $dataku1 = array (
             'source_no' =>  $no_po,
             'tanggal'   => $tgl_po,
@@ -149,7 +151,7 @@ $cek=0;
         $this->db->insert('accjurnaldetail',$dataku1); 
 
 
-/*
+
  Select b.nama_account, a.source_no, a.kode_account, sum(a.debet) as debet
 From accjurnaldetail a
 Inner join  account b on a.kode_account = b.kode_account

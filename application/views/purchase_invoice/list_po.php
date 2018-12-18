@@ -1,6 +1,4 @@
- <div   data-always-visible="1" data-rail-visible1="1">
-        
-                                                            <div class="row">
+
                                                                <div class="portlet-body form">
                                                                   <div class="form-body">
                                         <div class="table-scrollable">
@@ -9,9 +7,11 @@
 															   <tr>
 															   <th>Tgl PO</th>
 															   <th>No. PO</th>
+                                 <th>Total Po</th>
+                                 <th>PPN</th>
+                                 <th>Ammount</th>
 															   <th>Keterangan</th>
-                                 <th>Action</th>
-															   </tr>
+                                 </tr>
 															   </thead>
 															   <tbody>
 															   <?php
@@ -19,8 +19,11 @@
 																   echo"<tr>
                                    <td>".$row->tgl_po."</td>
                                    <td id='kode_po'>".$row->kode_po."</td>
+                                   <td id='total_po'>".$row->total_po."</td>
+                                    <td id='ppn'>".$row->total_ppn."</td>
+                                    <td id='ppn'>".$row->ammount."</td>
                                    <td>".$row->keterangan."</td>
-                                   <td><a href='".site_url('purchase_order/get_request/'.$row->kode_pr.'')."'  class='btn btn-primary btn-sm' id='get_request' >Pilih</a></td>
+                                  
                                    </tr>";
 															   }
 															   
@@ -30,8 +33,7 @@
                                </div></div>
                                                     </div>
                                                               
-                                                            </div>
-                                                        </div>
+                                                            
                                                         <script>
 function Getpr(id)
 {

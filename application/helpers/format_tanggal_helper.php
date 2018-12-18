@@ -22,7 +22,17 @@
             $pisah = explode("/",$tanggal);        
             $bulan = romawi_bulan($pisah[1]);
             
-            return 'PO/'.$no_po.'/MII/'.$bulan.'/'.substr($pisah[2],-2);
+            return 'PO-'.$no_po.'-MII-'.$bulan.'-'.substr($pisah[2],-2);
+        }
+    }
+      if ( ! function_exists('no_pi'))
+    {
+        function no_pi($no_po,$tanggal)
+        {
+            $pisah = explode("/",$tanggal);        
+            $bulan = romawi_bulan($pisah[1]);
+            
+            return 'PI-'.$no_po.'-MII-'.$bulan.'-'.substr($pisah[2],-2);
         }
     }
         
@@ -101,8 +111,8 @@
     {
         function shortdate_uki($tgl)
         {
-            $ubah = gmdate($tgl, time()+60*60*8);
-            $pecah = explode("/",$ubah);
+ 
+            $pecah = explode("/",$tgl);
             $tanggal = $pecah[0];
             $bulan = short_bulan($pecah[1]);
             $tahun = $pecah[2];
@@ -110,7 +120,7 @@
         }
     }
 
-    if ( ! function_exists('short_bulan'))
+    if ( ! function_exists('romawi_bulan'))
     {
         function romawi_bulan($bln)
         {

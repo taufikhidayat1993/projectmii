@@ -1,29 +1,15 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class M_purchaseinvoice extends CI_Model 
+class M_jurnalumum extends CI_Model 
 {
     function __construct() {
         parent::__construct();  // call model constructor    
     }
-function list_po($vendor){
-        $query = $this->db->select('tb_po.*,(total_ppn+total_po) as ammount');
-    $query = $this->db->where('status',0);
-    $query = $this->db->where('kode_vendor',$vendor);
-return $this->db->get('tb_po');
-}
-function detail_po($no_po){
 
-     $query = $this->db->query("select tb_barang.nama_barang,tb_barang.kode_account,tb_barang_satuan.nama_satuan,tb_detail_po.* from tb_detail_po left join tb_barang on tb_barang.kode_barang=tb_detail_po.kode_barang left join tb_barang_satuan on tb_detail_po.satuan= tb_barang_satuan.id_satuan where 
-        tb_detail_po.kode_po='".$no_po."'");        
-     return $query->result();
-}
-    var $table = 'tb_pi'; 
+    var $table = 'accjurnaldetail'; 
 
-    var $select = array('tb_pi.*','tb_supplier.nama_vendor'); //specify the columns you want to fetch from table
- // var $column_order = array('no_faktur','tgl_beli','nama_kasir','tb_pembelian.timestmp'); //set column field database for datatable orderable
-//  var $column_search = array('no_faktur','tgl_beli','nama_kasir','tb_pembelian.timestmp'); //set column field database for datatable searchable
-   
+    var $select = array('accjurnaldetail.*','sum(accjurnaldetail.debet) as debet','account.nama_account','accsource.nama_source'); 
     public function get_datatables($from, $to)
     {
         $this->_get_datatables_query($from, $to);       
@@ -55,11 +41,14 @@ function detail_po($no_po){
         $this->db
              ->select($this->select)
              ->from($this->table)
-			  ->join('tb_supplier', 'tb_pi.kode_vendor=tb_supplier.kode_vendor','left');
+			  ->join('accsource', 'accsource.kode_source=accjurnaldetail.source','left')
+               ->join('account', 'accjurnaldetail.kode_account=account.kode_account','left')
+              ->group_by('account.nama_account, accjurnaldetail.source_no, accjurnaldetail.kode_account')
+                ->order_by('accjurnaldetail.source_no','desc');
         if($from!='' && $to!='' || $from!= NULL) // To process our custom input parameter
         {
 
-            $this->db->where('tb_pi.tgl_po BETWEEN "'. date('Y-m-d', strtotime($from)). '" and "'. date('Y-m-d', strtotime($to)).'"');
+            $this->db->where('accjurnaldetail.tgl_po BETWEEN "'. date('Y-m-d', strtotime($from)). '" and "'. date('Y-m-d', strtotime($to)).'"');
         }
     }
 	  public function detail_pr($kode)
@@ -68,11 +57,11 @@ function detail_po($no_po){
         return $hasil->result();
 	}
  public function buat_kode()   {
-		  $this->db->select('RIGHT(no_pi,3) as kode', FALSE);
-		  $this->db->where('YEAR(tgl_pi)', date('Y'));
+		  $this->db->select('RIGHT(no_po,3) as kode', FALSE);
+		  $this->db->where('YEAR(tgl_po)', date('Y'));
 		  $this->db->limit(1);    
-          $this->db->order_by("no_pi", "desc"); 
-		  $query = $this->db->get('tb_pi'); 
+          $this->db->order_by("no_po", "desc"); 
+		  $query = $this->db->get('accjurnaldetail'); 
 
 		  //cek dulu apakah ada sudah ada kode di tabel.    
 		  if($query->num_rows() <> 0){       

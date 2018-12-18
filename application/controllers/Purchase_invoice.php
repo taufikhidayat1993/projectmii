@@ -25,7 +25,7 @@ class Purchase_invoice extends CI_Controller {
     $data   = array(
             'content'   => 'purchase_invoice/purchase_invoice_add',
             'account'  =>$this->db->query("select * from account where kode_account='2-110'")->result(),
-            'kode_po'  =>  $this->M_Purchaseinvoice->buat_kode()
+            'kode_pi'  =>  $this->M_Purchaseinvoice->buat_kode()
         );
 
     $this->load->view('container', $data);
@@ -62,30 +62,33 @@ $key++;
 }
 }
 public function purchase_invoice_simpan(){
-
+error_reporting(0);
          $this->load->library('form_validation');                
-        $this->form_validation->set_rules('no_pi', 'Nomor Po', 'trim|required');    
+        $this->form_validation->set_rules('no_pi', 'Nomor Invoice', 'trim|required');    
         $this->form_validation->set_rules('vendor', 'Nama Vendor', 'trim|required');  
         $this->form_validation->set_rules('TotalSubtotalhidden', 'Nama Barang', 'trim|required');      
         $this->form_validation->set_error_delimiters('<span class="help-block help-block-error"><span class="text-danger">', '</spa></span>');
         $this->form_validation->set_message('required','%s harus diisi !');
-        $tgl_po=shortdate_uki($this->input->post('tanggal_po'));
-
-
-        
-                if($this->input->post('val_tunai')==0){
-        $tgl_jatuh_tempo=shortdate_uki($this->input->post('jatuh_tempo'));
-      }else{
-         $tgl_jatuh_tempo="";
-      }
-        $no_pi=no_pi($this->input->post('no_pi'),$this->input->post('tanggal_po'));
+       $tgl_pi=shortdate_uki($this->input->post('tanggal_pi'));  
+        $tgl_jatuh_tempo=shortdate_uki($this->input->post('tgl_jatuhtempo'));   
+        $no_pi=no_pi($this->input->post('form_no'),$this->input->post('tanggal_pi'));
+         $kode_pi=$this->input->post('form_no"');
+         $inv=$this->input->post('no_pi');
               if  ($this->form_validation->run()) {
-                    
+            if($this->input->post('ppn2')!=0){
+     $status_ppn=1;
+            }else{
+$status_ppn=0;
+
+            }          
                 $data = array (
-            'kode_pr' => $this->input->post('no_request'),
-            'kode_po' => $no_pi,
-            'no_pi'   => $this->input->post('no_pi'),
-            'tgl_po'  => $tgl_po,
+            'kode_po' => $this->input->post('kode_po'),
+            'kode_pi' => $no_pi,
+            'no_pi'  =>  $kode_pi,
+            'tgl_pi'  => $tgl_pi,
+            'inv_no'  =>$inv,
+            'total_ppn'    => $this->input->post('ppn2'),
+            'ppn'    => $status_ppn,
            // 'tunai'   => $this->input->post('val_tunai'),
            // 'uang_muka' =>$this->input->post('uang_muka'),
             'kode_vendor' =>$this->input->post('vendor'),
@@ -93,12 +96,13 @@ public function purchase_invoice_simpan(){
             'jatuh_tempo' =>$tgl_jatuh_tempo,
             'modiby'  =>$this->session->userdata('user_id'),
             'modidate' => date('Y-m-d H:i:s'),
-            'total_po' =>  $this->input->post('TotalSubtotalhidden')     
+            'total_pi' =>  $this->input->post('TotalSubtotalhidden')     
                 );
-        $this->db->insert('tb_po',$data);
+        $this->db->insert('tb_pi',$data);
               $inputakunkredit = array (
             'source_no' =>  $no_pi,
-            'tanggal'   => $tgl_po,
+            'tanggal'   => $tgl_pi,
+            'source'   => 'PI',
             'kode_account' => $_POST['kas_bayar'], 
             'keterangan'=>  $_POST['keterangan'],         
             'kredit' =>  $_POST['TotalSubtotalhidden'],
@@ -109,37 +113,40 @@ public function purchase_invoice_simpan(){
 
         //input ppn
 
-        if($this->input->post('ppn')>0){
+        if($this->input->post('ppn2')!=0){
  $inputakunppn1 = array (
             'source_no' =>  $no_pi,
-            'tanggal'   => $tgl_po,
+            'tanggal'   => $tgl_pi,
+            'source'   => 'PI',
             'kode_account' => '2-130',            
-            'debet' =>  $_POST['ppn'],
+            'debet' =>  $_POST['ppn2'],
             'keterangan'=> $_POST['keterangan'],  
             'modiby' => $this->session->userdata('user_id'),
             'modidate' => date('Y-m-d H:i:s')
           );
         $this->db->insert('accjurnaldetail',$inputakunppn1); 
-         $inputakunppn2 = array (
+          $inputppn = array (
             'source_no' =>  $no_pi,
-            'tanggal'   => $tgl_po,
-            'kode_account'=> $_POST['kas_bayar'],            
-            'kredit' =>  $_POST['ppn'],
-            'keterangan'=> $_POST['keterangan'],  
+            'tanggal1'   => $tgl_pi,
+            'source'   => 'PI',
+            'kode_account' => $_POST['kas_bayar'], 
+            'keterangan'=>  $_POST['keterangan'],         
+            'kredit' =>  $_POST['ppn2'],
             'modiby' => $this->session->userdata('user_id'),
             'modidate' => date('Y-m-d H:i:s')
           );
-        $this->db->insert('accjurnaldetail',$inputakunppn2); 
+        $this->db->insert('accjurnaldetail',$inputppn); 
 
         }
             $no_array = 0;
-           foreach($_POST['kode_barang'] as $k)
+           foreach($_POST['kode'] as $k)
                   {
                     if( ! empty($k))
                     {
               $dataku = array (
             'source_no' =>  $no_pi,
-            'tanggal'   => $tgl_po,
+            'source'   => 'PI',
+            'tanggal'   => $tgl_pi,
             'kode_account' => $_POST['account'][$no_array], 
             'keterangan'=>  $_POST['keterangan'],             
             'debet' =>  $_POST['subtotal'][$no_array],
@@ -147,23 +154,14 @@ public function purchase_invoice_simpan(){
             'modidate' => date('Y-m-d H:i:s')
           );
         $this->db->insert('accjurnaldetail',$dataku); 
-
-
-/*
- Select b.nama_account, a.source_no, a.kode_account, sum(a.debet) as debet
-From accjurnaldetail a
-Inner join  account b on a.kode_account = b.kode_account
-Group by b.nama_account, a.source_no, a.kode_account
-Order by b.nama_account, a.source_no, a.kode_account
-*/
          $dataku = array (
-            'kode_po' =>  $no_pi,
+            'kode_pi' =>  $no_pi,
             'kode_barang' => $_POST['kode'][$no_array],            
             'satuan' =>  $_POST['satuan'][$no_array],
             'qty' => $_POST['jumlah_order'][$no_array],
             'harga'=>$_POST['harga'][$no_array]           
           );
-        $this->db->insert('tb_detail_po',$dataku);
+        $this->db->insert('tb_pi_detail',$dataku);
                    }                        
                     $no_array++;
                   }     

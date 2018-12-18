@@ -1,10 +1,10 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Jurnalumum extends CI_Controller {
+class Jurnal_umum extends CI_Controller {
     Public function __construct() { 
         parent::__construct(); 
-    $this->load->model('M_Purchaseorder');
+    $this->load->model('M_Jurnalumum');
      $this->load->model('Mastermodel');
     $this->load->helper('nominal');
    $this->load->helper('format_tanggal'); 
@@ -12,7 +12,7 @@ class Jurnalumum extends CI_Controller {
   public function index() 
   {     
 		$data   = array(
-            'content'   => 'purchase_order/purchase_order'
+            'content'   => 'Jurnalumum/Jurnal_umum'
         );
 		$this->load->view('container', $data);
   }
@@ -25,19 +25,19 @@ class Jurnalumum extends CI_Controller {
     $data   = array(
             'content'   => 'purchase_order/purchase_order_add',
             'account'  =>$this->db->query("select * from account where kode_account='2-110'")->result(),
-            'kode_po'  =>  $this->M_Purchaseorder->buat_kode()
+            'kode_po'  =>  $this->M_Jurnalumum->buat_kode()
         );
 
     $this->load->view('container', $data);
   }
     public function list_request() 
   {
-    $data['list'] = $this->M_Purchaseorder->list_request()->result();
+    $data['list'] = $this->M_Jurnalumum->list_request()->result();
     $this->load->view('purchase_order/list_request',$data);
   }
      public function get_request($no_request) 
   {
- $data['list'] = $this->M_Purchaseorder->detail_request($no_request);
+ $data['list'] = $this->M_Jurnalumum->detail_request($no_request);
     $this->load->view('purchase_order/data_request',$data);
   }
    public function cari_vendor() 
@@ -190,7 +190,7 @@ Order by b.nama_account, a.source_no, a.kode_account
         }
 
        
-        $posts = $this->M_Purchaseorder->get_datatables($from,$to); 
+        $posts = $this->M_Jurnalumum->get_datatables($from,$to); 
 
         $data = array();
         $no = $this->input->post('start');
@@ -200,20 +200,21 @@ Order by b.nama_account, a.source_no, a.kode_account
             
             $no++;
             $row = array();
-            $row[] = $post->tgl_po;
-            $row[] = $post->kode_po;          
-            $row[] = $post->kode_pr;
-            $row[] = $post->nama_vendor;
-          
-            $row[] = nominal($post->total_po);
-             $row[] = "-";
+            $row[] = $post->tanggal;
+            $row[] = $post->nama_source;          
+            $row[] = $post->source_no;
+            $row[] = $post->kode_account;
+            $row[] = $post->nama_account;          
+            $row[] = nominal($post->debet);
+            $row[] = nominal($post->kredit);
+           
             $data[] = $row;
         }
         
         $output = array(
             "draw" => $this->input->post('draw'),
-            "recordsTotal" => $this->M_Purchaseorder->count_all(),
-            "recordsFiltered" => $this->M_Purchaseorder->count_filtered($from,$to),
+            "recordsTotal" => $this->M_Jurnalumum->count_all(),
+            "recordsFiltered" => $this->M_Jurnalumum->count_filtered($from,$to),
             "data" => $data,
         );
         //output to json format

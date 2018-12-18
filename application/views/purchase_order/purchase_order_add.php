@@ -197,7 +197,7 @@ foreach($account as $row){
 											</div>
 											<div class='form-actions'>
 											<div class='row'>
-											<button class='btn sbold blue' type="submit" style='width:100%;'  id='SimpanTransaksi' ><i class='fa fa-cart-plus'></i> Simpan</button>
+											<button class='btn sbold blue' type="button" style='width:100%;'  id='SimpanTransaksi' ><i class='fa fa-cart-plus'></i> Simpan</button>
 											</div>
 											</div>
 										</div>
