@@ -204,9 +204,8 @@ $(document).on('click', '#hapusvendor', function(e){
             cache: false,
             dataType:'json',
             success: function(data){
-
-                $('#Notifikasi').html(data.pesan);
-                $("#Notifikasi").fadeIn('fast').show().delay(3000).fadeOut('fast');
+  var $toast = toastr['success'](data.pesan);
+               
                  table.draw();
                       }
         });

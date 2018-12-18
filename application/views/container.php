@@ -38,7 +38,7 @@
         <link href="<?php echo base_url('assets/')?>css/ui/jquery-ui-1.10.4.custom.min.css" rel="stylesheet" type="text/css" />
     <link href="<?php echo base_url('assets/')?>css/ui/demo_table_jui.css" rel="stylesheet" type="text/css" />
         <link rel="stylesheet" href="<?php echo base_url()?>js/jquery-ui/jquery-ui.css">
-           <link href="<?php echo base_url()?>global/plugins/bootstrap-toastr/toastr.min.css" rel="stylesheet" type="text/css" />
+           <link href="<?php echo base_url('assets/')?>global/plugins/bootstrap-toastr/toastr.min.css" rel="stylesheet" type="text/css" />
     <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>  -->
     
     <style>
@@ -53,9 +53,7 @@
         @import "css/sweetalert2.css";
     </style>
      <script src="<?php echo base_url()?>js/jquery-1.12.2.min.js"></script>
-     <script src="<?php echo base_url()?>assets/global/plugins/jquery-ui/jquery-ui.min.js" type="text/javascript"></script>
-    <script src="<?php echo base_url()?>js/perfect-scrollbar.min.js"></script>
- 
+  
     <script src="<?php echo base_url()?>js/jquery.number.js"></script>
 
 </head>
@@ -537,7 +535,7 @@
          <script src="<?php echo base_url('assets/')?>global/plugins/bootstrap-toastr/toastr.min.js" type="text/javascript"></script>
         <script src="<?php echo base_url('assets/')?>global/scripts/app.min.js" type="text/javascript"></script>
       <script src="<?php echo base_url()?>js/select2.js"></script>
-            <script src="<?php echo base_url('assets/')?>pages/scripts/ui-modals.min.js" type="text/javascript"></script>
+          <!--  <script src="<?php// echo base_url('assets/')?>pages/scripts/ui-modals.min.js" type="text/javascript"></script> -->
         <!-- END THEME GLOBAL SCRIPTS -->
         <!-- BEGIN THEME LAYOUT SCRIPTS -->
               <script src="<?php echo base_url('assets/')?>global/plugins/bootstrap-markdown/lib/markdown.js" type="text/javascript"></script>
@@ -560,6 +558,18 @@
           <script src="<?php echo base_url('assets/')?>pages/scripts/table-datatables-managed.min.js" type="text/javascript"></script>
 <link rel="stylesheet" type="text/css" href="<?php echo base_url('assets/')?>sweetalert/sweetalert.css">
         <script type="text/javascript" src="<?php echo base_url('assets/')?>sweetalert/sweetalert.min.js"></script>
-          
+<script>
+          $(document).ready(function () {
+                   var $showDuration = '300';
+            var $hideDuration = '300';
+            var $timeOut = '300';       
+             toastr.options = {
+                closeButton: true,
+                positionClass: 'toast-bottom-right',
+                preventDuplicates: true,
+                onclick: null
+            }; 
+        });
+    </script>
 </body>
 </html>
