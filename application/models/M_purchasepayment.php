@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class M_jurnalumum extends CI_Model 
+class M_Purchasepayment extends CI_Model 
 {
     function __construct() {
         parent::__construct();  // call model constructor    
@@ -54,17 +54,17 @@ class M_jurnalumum extends CI_Model
             $this->db->where('accjurnaldetail.tgl_po BETWEEN "'. date('Y-m-d', strtotime($from)). '" and "'. date('Y-m-d', strtotime($to)).'"');
         }
     }
-	  public function detail_pr($kode)
+	  public function detail_invoice($kode)
     {
-	 $hasil=$this->db->query("SELECT * FROM detail_request_order WHERE kode_pr='$kode'");
+	 $hasil=$this->db->query("SELECT tb_pi.*,(total_pi+total_ppn) as total FROM tb_pi WHERE kode_vendor='$kode'");
         return $hasil->result();
 	}
  public function buat_kode()   {
-		  $this->db->select('RIGHT(no_po,3) as kode', FALSE);
-		  $this->db->where('YEAR(tgl_po)', date('Y'));
+		  $this->db->select('RIGHT(form_no,3) as kode', FALSE);
+		  $this->db->where('YEAR(tanggal)', date('Y'));
 		  $this->db->limit(1);    
-          $this->db->order_by("no_po", "desc"); 
-		  $query = $this->db->get('accjurnaldetail'); 
+          $this->db->order_by("form_no", "desc"); 
+		  $query = $this->db->get('purchase_payment'); 
 
 		  //cek dulu apakah ada sudah ada kode di tabel.    
 		  if($query->num_rows() <> 0){       

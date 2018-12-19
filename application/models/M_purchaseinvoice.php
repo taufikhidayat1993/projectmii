@@ -12,10 +12,8 @@ function list_po($vendor){
     $query = $this->db->where('kode_vendor',$vendor);
 return $this->db->get('tb_po');
 }
-function detail_po($no_po){
-
-     $query = $this->db->query("select tb_barang.nama_barang,tb_barang.kode_account,tb_barang_satuan.nama_satuan,tb_detail_po.* from tb_detail_po left join tb_barang on tb_barang.kode_barang=tb_detail_po.kode_barang left join tb_barang_satuan on tb_detail_po.satuan= tb_barang_satuan.id_satuan where 
-        tb_detail_po.kode_po='".$no_po."'");        
+function detail_invoice($no_po){
+     $query = $this->db->query("selct * from tb_pi where kode_vendor='".$no_po."'");        
      return $query->result();
 }
     var $table = 'tb_pi'; 

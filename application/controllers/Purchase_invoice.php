@@ -98,7 +98,47 @@ $status_ppn=0;
             'modidate' => date('Y-m-d H:i:s'),
             'total_pi' =>  $this->input->post('TotalSubtotalhidden')     
                 );
-        $this->db->insert('tb_pi',$data);
+       
+
+        //input ppn
+
+            $no_array = 0;
+           foreach($_POST['kode'] as $k)
+                  {
+    if( ! empty($k))
+                    {
+    $query=$this->db->query("select * from accjurnaldetail where source_no='".$no_pi."' and kode_account='". $_POST['account'][$no_array]."'");
+    $hasil=$query->result();
+    if($query->num_rows() != 0){
+      $debe_awal=$hasil->debet;
+      $debet_akhir=$debat_awal+$_POST['subtotal'][$no_array];
+      $this->db->query("update accjurnaldetail set debet='".$debet_akhir."' where source_no='".$no_pi."' and kode_account='". $_POST['account'][$no_array]."'");
+    }else{
+              $dataku = array (
+            'source_no' =>  $no_pi,
+            'source'   => 'PI',
+            'tanggal'   => $tgl_pi,
+            'kode_account' => $_POST['account'][$no_array], 
+            'keterangan'=>  $_POST['keterangan'],             
+            'debet' =>  $_POST['subtotal'][$no_array],
+            'modiby' => $this->session->userdata('user_id'),
+            'modidate' => date('Y-m-d H:i:s')
+          );
+        $this->db->insert('accjurnaldetail',$dataku); 
+      }
+         $dataku = array (
+            'kode_pi' =>  $no_pi,
+            'kode_barang' => $_POST['kode'][$no_array],            
+            'satuan' =>  $_POST['satuan'][$no_array],
+            'qty' => $_POST['jumlah_order'][$no_array],
+            'harga'=>$_POST['harga'][$no_array]           
+          );
+        $this->db->insert('tb_pi_detail',$dataku);
+                   }                        
+                    $no_array++;
+                  }     
+
+               $this->db->insert('tb_pi',$data);
               $inputakunkredit = array (
             'source_no' =>  $no_pi,
             'tanggal'   => $tgl_pi,
@@ -109,9 +149,8 @@ $status_ppn=0;
             'modiby' => $this->session->userdata('user_id'),
             'modidate' => date('Y-m-d H:i:s')
           );
-        $this->db->insert('accjurnaldetail',$inputakunkredit); 
+        $this->db->insert('accjurnaldetail',$inputakunkredit);    
 
-        //input ppn
 
         if($this->input->post('ppn2')!=0){
  $inputakunppn1 = array (
@@ -127,46 +166,16 @@ $status_ppn=0;
         $this->db->insert('accjurnaldetail',$inputakunppn1); 
           $inputppn = array (
             'source_no' =>  $no_pi,
-            'tanggal1'   => $tgl_pi,
+            'tanggal'   => $tgl_pi,
             'source'   => 'PI',
-            'kode_account' => $_POST['kas_bayar'], 
+            'kode_account' => '2-120', 
             'keterangan'=>  $_POST['keterangan'],         
             'kredit' =>  $_POST['ppn2'],
             'modiby' => $this->session->userdata('user_id'),
             'modidate' => date('Y-m-d H:i:s')
           );
         $this->db->insert('accjurnaldetail',$inputppn); 
-
-        }
-            $no_array = 0;
-           foreach($_POST['kode'] as $k)
-                  {
-                    if( ! empty($k))
-                    {
-              $dataku = array (
-            'source_no' =>  $no_pi,
-            'source'   => 'PI',
-            'tanggal'   => $tgl_pi,
-            'kode_account' => $_POST['account'][$no_array], 
-            'keterangan'=>  $_POST['keterangan'],             
-            'debet' =>  $_POST['subtotal'][$no_array],
-            'modiby' => $this->session->userdata('user_id'),
-            'modidate' => date('Y-m-d H:i:s')
-          );
-        $this->db->insert('accjurnaldetail',$dataku); 
-         $dataku = array (
-            'kode_pi' =>  $no_pi,
-            'kode_barang' => $_POST['kode'][$no_array],            
-            'satuan' =>  $_POST['satuan'][$no_array],
-            'qty' => $_POST['jumlah_order'][$no_array],
-            'harga'=>$_POST['harga'][$no_array]           
-          );
-        $this->db->insert('tb_pi_detail',$dataku);
-                   }                        
-                    $no_array++;
-                  }     
-
-                                
+        }               
                       $data['success'] = true;
               }else{
 
