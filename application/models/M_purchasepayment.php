@@ -60,10 +60,10 @@ class M_Purchasepayment extends CI_Model
         return $hasil->result();
 	}
  public function buat_kode()   {
-		  $this->db->select('RIGHT(form_no,3) as kode', FALSE);
+		  $this->db->select('RIGHT(auto_form_no,3) as kode', FALSE);
 		  $this->db->where('YEAR(tanggal)', date('Y'));
 		  $this->db->limit(1);    
-          $this->db->order_by("form_no", "desc"); 
+          $this->db->order_by("auto_form_no", "desc"); 
 		  $query = $this->db->get('purchase_payment'); 
 
 		  //cek dulu apakah ada sudah ada kode di tabel.    

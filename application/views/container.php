@@ -477,7 +477,8 @@
 <li><a class='nav-link' href="<?php echo base_url('group')?>">Group Account</a></li>    
  <li><a class='nav-link' href="<?php echo base_url('header')?>">Header Account</a></li>                 
   <li><a class='nav-link' href="<?php echo base_url('account')?>">Account</a></li>         
-   <li><a class='nav-link' href="<?php echo base_url('jurnal_umum')?>">Jurnal Umum</a></li>           
+   <li><a class='nav-link' href="<?php echo base_url('jurnal_umum')?>">Jurnal Umum</a></li>   
+    <li><a class='nav-link' href="<?php echo base_url('account_saldoawal')?>">Saldo Awal</a></li>        
                         </ul>
                     </li>
                    
@@ -537,6 +538,7 @@
                  <!-- Jquery Validate -->
          <script src="<?php echo base_url('assets/')?>global/plugins/bootstrap-toastr/toastr.min.js" type="text/javascript"></script>
         <script src="<?php echo base_url('assets/')?>global/scripts/app.min.js" type="text/javascript"></script>
+           <script src="<?php echo base_url('assets/')?>pages/scripts/table-datatables-scroller.min.js" type="text/javascript"></script
       <script src="<?php echo base_url()?>js/select2.js"></script>
           <!--  <script src="<?php// echo base_url('assets/')?>pages/scripts/ui-modals.min.js" type="text/javascript"></script> -->
         <!-- END THEME GLOBAL SCRIPTS -->

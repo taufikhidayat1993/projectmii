@@ -6,7 +6,7 @@ class Purchase_payment extends CI_Controller {
         parent::__construct(); 
     $this->load->model('M_Purchasepayment');
      $this->load->model('Mastermodel');
-    $this->load->helper('kode_transaksi');
+  $this->load->helper('kode_transaksi');
    $this->load->helper('format_tanggal'); 
   }
   public function index() 
@@ -24,7 +24,8 @@ class Purchase_payment extends CI_Controller {
             ->add('Add New Payment','purchase_payment/add');
     $data   = array(
             'content'   => 'purchase_payment/purchase_payment_add',
-            'account'  =>$this->db->query("select * from account where kode_account='2-110'")->result(),
+            'account'  =>$this->db->query("select * from account where kas='1'")->result(),
+            'default'  =>$this->db->query("select * from account where kas='1' limit 1")->row(),
             'kode_po'  =>  $this->M_Purchasepayment->buat_kode()
         );
 
@@ -63,22 +64,13 @@ public function purchase_payment_simpan(){
 
          $this->load->library('form_validation');                
         $this->form_validation->set_rules('no_po', 'Nomor Po', 'trim|required');    
-        $this->form_validation->set_rules('vendor', 'Nama Vendor', 'trim|required');  
-        $this->form_validation->set_rules('TotalSubtotalhidden', 'Nama Barang', 'trim|required');      
+        $this->form_validation->set_rules('vendor', 'Nama Vendor', 'trim|required');     
         $this->form_validation->set_error_delimiters('<span class="help-block help-block-error"><span class="text-danger">', '</spa></span>');
         $this->form_validation->set_message('required','%s harus diisi !');
-        $tgl_po=shortdate_uki($this->input->post('tanggal_po'));
-
-
-        
-         
-      if($this->input->post('ppn2') >0){
-$cek=1;
-} else {
-$cek=0;
-}
-        $no_po=no_payment($this->input->post('no_po'),$this->input->post('tanggal_po'));
-              if  ($this->form_validation->run()) {                    
+        $tgl_po=shortdate_uki($this->input->post('tanggal_payment'));      
+        $no_po=no_payment($this->input->post('no_po'),$this->input->post('tanggal_payment'));
+              if  ($this->form_validation->run()) {   
+              /*                 
                 $data = array (
             'kode_pr' => $this->input->post('no_request'),
             'kode_po' => $no_po,
@@ -95,7 +87,6 @@ $cek=0;
             'total_po' =>  $this->input->post('TotalSubtotalhidden')     
                 );
         $this->db->insert('tb_po',$data);
-/*
               $inputakunkredit = array (
             'source_no' =>  $no_po,
             'tanggal'   => $tgl_po,
@@ -106,9 +97,7 @@ $cek=0;
             'modidate' => date('Y-m-d H:i:s')
           );
         $this->db->insert('accjurnaldetail',$inputakunkredit); 
-
         //input ppn
-
         if($this->input->post('ppn')>0){
  $inputakunppn1 = array (
             'source_no' =>  $no_po,
@@ -130,34 +119,54 @@ $cek=0;
             'modidate' => date('Y-m-d H:i:s')
           );
         $this->db->insert('accjurnaldetail',$inputakunppn2); 
-
         }
         */
             $no_array = 0;
-           foreach($_POST['kode'] as $k)
+           foreach($_POST['kode_pi'] as $k)
                   {
-                    if( ! empty($k))
-                    {
-                      /*
-              $dataku1 = array (
+           if( ! empty($k))
+                    {                   
+              $in_payment = array (
+            'tanggal'   => $tgl_po,
+            'no_pi' => $_POST['kode_pi'][$no_array], 
+            'form_no'=>   $no_po,     
+            'auto_form_no'=>   $this->input->post('no_po'),         
+            'kode_vendor' =>  $_POST['vendor'],
+            'total_payment' =>  $_POST['jml_payment'][$no_array],
+            'modiby' => $this->session->userdata('user_id'),
+            'modidate' => date('Y-m-d H:i:s')
+             );
+        $this->db->insert('purchase_payment',$in_payment);   
+        $jurnalhutang = array (
+            'source' =>'PP',
             'source_no' =>  $no_po,
             'tanggal'   => $tgl_po,
-            'kode_account' => $_POST['account'][$no_array], 
-            'keterangan'=>  $_POST['keterangan'],             
-            'debet' =>  $_POST['subtotal'][$no_array],
+            'kode_account'=> '2-100',            
+            'debet' => $_POST['jml_payment'][$no_array],
             'modiby' => $this->session->userdata('user_id'),
             'modidate' => date('Y-m-d H:i:s')
           );
-        $this->db->insert('accjurnaldetail',$dataku1); 
+        $this->db->insert('accjurnaldetail',$jurnalhutang); 
 
-
+        $jurnalhutangkredit = array (
+           'source' =>'PP',
+            'source_no' =>  $no_po,
+            'tanggal'   => $tgl_po,
+            'kode_account'=> $_POST['kas_bayar'],            
+            'kredit' => $_POST['jml_payment'][$no_array],
+            'modiby' => $this->session->userdata('user_id'),
+            'modidate' => date('Y-m-d H:i:s')
+        );
+        $this->db->insert('accjurnaldetail',$jurnalhutangkredit ); 
+   /*
+   /*
 
  Select b.nama_account, a.source_no, a.kode_account, sum(a.debet) as debet
 From accjurnaldetail a
 Inner join  account b on a.kode_account = b.kode_account
 Group by b.nama_account, a.source_no, a.kode_account
 Order by b.nama_account, a.source_no, a.kode_account
-*/
+
          $dataku2 = array (
             'kode_po' =>  $no_po,
             'kode_barang' => $_POST['kode'][$no_array],            
@@ -166,7 +175,9 @@ Order by b.nama_account, a.source_no, a.kode_account
             'harga'=>$_POST['harga'][$no_array]           
           );
         $this->db->insert('tb_detail_po',$dataku2);
-                   }                        
+        */
+                   } 
+
                     $no_array++;
                   }     
 

@@ -2,7 +2,8 @@
 <div class="page-bar">
   <?php echo $this->breadcrumb->show() ?>                     
 					   </div>
-                <form class="form-horizontal" id="form_add_pelanggan" action="<?php echo site_url('purchase_order/purchase_order_simpan'); ?>" method="post">
+                <form class="form-horizontal" id="form_add_pelanggan" 
+                action="<?php echo site_url('purchase_payment/purchase_payment_simpan'); ?>" method="post">
 					      <div class="row">
 
                                                                <div class="portlet-body form">
@@ -51,7 +52,7 @@
                                                                     <div class="input-group" id="form_no">
                                                                       <span  class="input-group-btn">
                                                                         <button class="btn btn-primary" type="button">
-                                                              PO
+                                                              VP
                                                              </button>
                                                              </span>
                                                               <input type="text"  name="no_po" 
@@ -139,9 +140,11 @@
         <div class='form-group'>
                 <label class='col-md-3 control-label'>Bank</label>
                 <div class='col-md-9'>
-                  <input type="text" name="kode_account" class=" form-control input-inline input-xsmall col-md-3">
+                  <input type="text" name="kode_account" id="kode_account"
+                  value="<?php echo $default->kode_account; ?>"
+                   class=" form-control input-inline input-xsmall col-md-3" readonly>
 
-                   <select class="form-control input-inline input-medium" name="kas_bayar">
+                   <select class="form-control input-inline input-medium" name="kas_bayar"  id="kas_bayar">
      <?php
 foreach($account as $row){
      echo "<option value='".$row->kode_account."'>".$row->nama_account."</option>";
@@ -161,7 +164,7 @@ foreach($account as $row){
 											</div>
 											<div class='form-actions'>
 											<div class='row'>
-											<button class='btn sbold blue' type="button" style='width:100%;'  id='SimpanTransaksi' ><i class='fa fa-cart-plus'></i> Simpan</button>
+											<button class='btn sbold blue' type="submit" style='width:100%;'  id='SimpanTransaksi' ><i class='fa fa-cart-plus'></i> Simpan</button>
 											</div>
 											</div>
 										</div>
@@ -183,6 +186,11 @@ $(document).ready(function(){
 $("#vendor").on("change", function() {
         var kodenya= $("#vendor").val();
           $('#data_invoice').load("<?php echo base_url();?>/purchase_payment/get_pi/"+kodenya);
+    });
+
+$("#kas_bayar").on("change", function() {
+      var kodenya= $("#kas_bayar").val();
+          $('#kode_account').val(kodenya);
     });
 
 	
@@ -288,30 +296,20 @@ function AutoCompleteGue(Lebar, KataKunci, Indexnya)
 	HitungTotalBayar();
 }
 
-$(document).on('click', '#daftar-autocomplete li', function(){
-	$(this).parent().parent().parent().find('input').val($(this).find('span#barangnya').html());
-		
-	var Indexnya = $(this).parent().parent().parent().parent().index();
-		var kodenya = $(this).find('span#kodenya').html();
-	var NamaBarang = $(this).find('span#barangnya').html();
-	var Harganya = $(this).find('span#harganya').html();
+$(document).on('click', '#pay', function(){
+  if ($(this).is(':checked')) {
+	  $(this).parent().parent().find("input").each(function(){ 
+         $(this).removeAttr("readonly");
+          $(this).focus();
 
-$('#TabelTransaksi tbody tr:eq('+Indexnya+') td:nth-child(2)').find('div#hasil_pencarian').hide();
-$('#TabelTransaksi tbody tr:eq('+Indexnya+') td:nth-child(3) input').val(kodenya);
-$('#TabelTransaksi tbody tr:eq('+Indexnya+') td:nth-child(6) input').val($(this).find('span#satuan_id').html());
+    });
+  }else{
+     $(this).parent().parent().find("input").each(function(){ 
+         $(this).attr("readonly",true);
+    });
 
-$('#TabelTransaksi tbody tr:eq('+Indexnya+') td:nth-child(6) span').html($(this).find('span#nama_satuan').html());
-	var IndexIni = Indexnya + 1;
-	var TotalIndex = $('#TabelTransaksi tbody tr').length;
-	if(IndexIni == TotalIndex){
-		BarisBaru();
-		$('html, body').animate({ scrollTop: $(document).height() }, 0);
-	}
-	else {
-		$('#TabelTransaksi tbody tr:eq('+Indexnya+') td:nth-child(5) input').focus();
-	}
+  }
 
-	HitungTotalBayar();
 });
 
 $(document).on('keyup', '#harga, #jumlah_order, #ppn', function(){
