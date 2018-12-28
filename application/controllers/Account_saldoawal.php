@@ -7,6 +7,7 @@ class Account_saldoawal extends CI_Controller {
         $this->load->model('Account_saldoawalmodel','', TRUE);
          $this->load->model('headermodel');
       $this->load->helper(array('form', 'url'));
+      $this->load->helper('format_tanggal'); 
   }
   public function index() 
   {
@@ -23,35 +24,7 @@ public function add_account() {
     $this->load->view('account/account_add',$data);
     }
 
-public function account_edit_data($id_account = NULL)
-  {
-     if( ! empty($id_account))
-    {
-        $this->load->library('form_validation');                
-           $this->form_validation->set_rules('nama_account', 'Nama Account', 'trim|required');
-        $this->form_validation->set_rules('kode_account', 'No Account', 'trim|required');                  
-        $this->form_validation->set_error_delimiters('<span class=help-block help-block-error">', '</span>');
-              $this->form_validation->set_message('required','%s harus diisi !');
-                $this->form_validation->set_message('numeric','%s harus angka !');
-            if($this->form_validation->run() == TRUE)
-            {
-              $headerid      = $this->input->post('headerid');
-              $kode_account      = $this->input->post('kode_account');
-              $nama_account    = $this->input->post('nama_account');
-              $tipe            = $this->input->post('tipe');
-              $update          = $this->Account_saldoawalmodel->update_account($headerid,$kode_account,$nama_account,$tipe);
-               $data['success'] = true;
-            }
-            else
-            {
-               foreach ($_POST as $key => $value) {
-                       $data['messages'][$key] = form_error($key);
-                     }
-            }
-                echo json_encode($data);
-              }
 
-  }
 public function edit($kode_account = NULL)
   {
     if( ! empty($kode_account))
@@ -64,22 +37,47 @@ public function edit($kode_account = NULL)
   
 public function simpan(){
    $no_array = 0;
-           foreach($_POST['kode_account'] as $k)
+           foreach($_POST['saldoawal'] as $k)
                   {
            if( ! empty($k))
                     {  
-     $in_payment = array (
-            'tanggal'   => $tgl_po,
-            'no_pi' => $_POST['kode_pi'][$no_array], 
-            'form_no'=>   $no_po,     
-            'auto_form_no'=>   $this->input->post('no_po'),         
-            'kode_vendor' =>  $_POST['vendor'],
-            'total_payment' =>  $_POST['jml_payment'][$no_array],
+if( $_POST['saldoawal'][$no_array] > 0){
+   $tgl=shortdate_uki($_POST['periode'][$no_array]);   
+$row= $this->db->query("select * from  accjurnaldetail where kode_account ='".$_POST['kode_account'][$no_array]."' and source='SA'");
+if($row->num_rows() == 0){
+ $in_jurnal1 = array (
+            'tanggal'   =>  $tgl,
+            'kode_account' => $_POST['kode_account'][$no_array], 
+            'source'=>   'SA',     
+            'debet'=>  $_POST['saldoawal'][$no_array],         
             'modiby' => $this->session->userdata('user_id'),
             'modidate' => date('Y-m-d H:i:s')
              );
-        $this->db->insert('purchase_payment',$in_payment);  
+ $this->db->insert('accjurnaldetail',$in_jurnal1); 
+}else{
+ $in_jurnal = array (
+            'tanggal'   =>  $tgl,
+            'kode_account' => $_POST['kode_account'][$no_array], 
+            'source'=>   'SA',     
+            'debet'=>  $_POST['saldoawal'][$no_array],         
+            'modiby' => $this->session->userdata('user_id'),
+            'modidate' => date('Y-m-d H:i:s')
+             );
+   $this->db->where('kode_account',$_POST['kode_account'][$no_array]); 
+    $this->db->where('source','SA'); 
+   $this->db->update('accjurnaldetail',$in_jurnal); 
+
+$update_saldo = array (
+            'periode_tanggal'   =>  $tgl,
+            'saldo_awal'=>  $_POST['saldoawal'][$no_array]
+             );
+$this->db->where('kode_account',$_POST['kode_account'][$no_array]); 
+ $this->db->update('account',$update_saldo); 
+}
+}
+        
                     }
+                    $no_array++;
                   }
 }
   

@@ -16,7 +16,7 @@
                                      
                                     </div>
                                        <form class="form-horizontal" id="form_add_pelanggan" 
-                action="<?php echo site_url('purchase_payment/purchase_payment_simpan'); ?>" method="post">
+                action="<?php echo site_url('account_saldoawal/simpan'); ?>" method="post">
                                     <div class="portlet-body">		
                                     <div id="Notifikasi" style="display: none;"></div>	
                                         <table class="table table-striped table-bordered table-hover order-column" id="sample_1">
@@ -74,6 +74,7 @@ $tanggal=$row->periode_tanggal;
                      	<script>
 	
 		    $(document).ready(function () {
+                $(".rupiah").number(true);
                     $(".dp").datepicker({
                             dateFormat : "dd/mm/YYYY",
                             showAnim : "fold"

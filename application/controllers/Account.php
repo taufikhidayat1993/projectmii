@@ -31,8 +31,30 @@ class Account extends CI_Controller {
             $row[] = $post->nama_account;
             $row[] = $post->tipe;
             $row[] = $post->nama_header;
-            $row[] = "<a href='".site_url('account/edit/'.$post->kode_account)."' id='Editaccount' class='btn btn-xs blue'><i class='fa fa-edit'></i></a>
-                         <a href='".site_url('account/hapus/'.$post->kode_account)."' id='hapusaccount'class='btn btn-xs red' ><i class='fa fa-trash'></i></a>";
+             $row[] = "<span class='rupiah'>".number_format($post->saldo)."</span>";
+            $row[] = "<div class='clearfix'>
+           <div class='btn-group'>
+<button class='btn btn-info btn-sm dropdown-toggle' type='button' data-toggle='dropdown'> Tools
+                                                                        <i class='fa fa-angle-down'></i>
+                                                                    </button>
+                                                                    <ul class='dropdown-menu pull-right' role='menu'>
+                                                                        <li>
+                                                                            <a  href='".site_url('account/edit/'.$post->kode_account)."' id='Editaccount'> Edit </a>
+                                                                        </li>
+                                                                        <li>
+                                                                            <a  href='".site_url('account/hapus/'.$post->kode_account)."' id='hapusaccount'> Hapus </a>
+                                                                        </li>
+                                                                        <li>
+                                                                            <a href='javascript:;'> Something else here </a>
+                                                                        </li>
+                                                                        <li class='divider'> </li>
+                                                                        <li>
+                                                                            <a href='javascript:;'> Separated link </a>
+                                                                        </li>
+                                                                    </ul>
+                                                                    </div>
+
+                         </div>";
             $data[] = $row;
         }
         

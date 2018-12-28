@@ -10,13 +10,13 @@
                                                                   <select class="form-control" id="headerid" name="headerid">
                                                                   <?php 
                                                                   foreach($list as $row){
-                                                                    if($account->headerid == $row->headerid) {
+                                                                    if($account->kode_header == $row->kode_header) {
                                                                     ?>
-                                                                           <option value="<?php echo $row->headerid; ?>" selected><?php echo $row->nama_header; ?></option>
+                                                                           <option value="<?php echo $row->kode_header; ?>" selected><?php echo $row->nama_header; ?></option>
                                                                     <?php
                                                                   }else{
                                                                     ?>
-<option value="<?php echo $row->headerid; ?>"><?php echo $row->nama_header; ?></option>
+<option value="<?php echo $row->kode_header; ?>"><?php echo $row->nama_header; ?></option>
                                                                     <?php
                                                                   }
                                                                   } 

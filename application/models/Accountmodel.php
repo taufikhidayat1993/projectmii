@@ -31,9 +31,9 @@ class Accountmodel extends CI_Model
     private function _get_datatables_query($nama_account,$header)
     {
         $this->db
-             ->select('kode_account,nama_account,tipe,accheader.nama_header')
+             ->select('kode_account,nama_account,tipe,accheader.nama_header,IFNULL((select  sum(debet-kredit)  from accjurnaldetail b where b.kode_account=account.kode_account),0) as saldo')
              ->from($this->table)
-             ->join('accheader', 'accheader.kode_header=account.kode_header','left');
+             ->join('accheader','accheader.kode_header=account.kode_header','left');
 			
     if($nama_account!='') // To process our custom input parameter
     {

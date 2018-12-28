@@ -479,6 +479,7 @@
   <li><a class='nav-link' href="<?php echo base_url('account')?>">Account</a></li>         
    <li><a class='nav-link' href="<?php echo base_url('jurnal_umum')?>">Jurnal Umum</a></li>   
     <li><a class='nav-link' href="<?php echo base_url('account_saldoawal')?>">Saldo Awal</a></li>        
+     <li><a class='nav-link' href="<?php echo base_url('buku_bank')?>">Buku Bank</a></li>     
                         </ul>
                     </li>
                    

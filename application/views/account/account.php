@@ -69,7 +69,7 @@
                                                     <th>Nama Account</th>
                                                     <th>Tipe</th>
                                                     <th>Header</th>
-                                                   
+                                                    <th>Saldo</th>
                                                    <th width="10%">ACTION</th>
                                                 </tr>
                                             </thead>
