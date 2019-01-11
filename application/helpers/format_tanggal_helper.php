@@ -25,6 +25,15 @@
             return 'PO-'.$no_po.'-MII-'.$bulan.'-'.substr($pisah[2],-2);
         }
     }
+     if ( ! function_exists('kode_belakang'))
+    {
+        function kode_belakang($perusahaan,$date,$tahun)
+        {       
+            $bulan = romawi_bulan($date);
+            
+            return $perusahaan.'/'.$bulan.'/'.substr($tahun,-2);
+        }
+    } 
       if ( ! function_exists('no_pi'))
     {
         function no_pi($no_po,$tanggal)

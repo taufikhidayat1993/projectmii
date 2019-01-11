@@ -207,7 +207,29 @@ Order by b.nama_account, a.source_no, a.kode_account
             $row[] = $post->nama_account;          
             $row[] = nominal($post->debet);
             $row[] = nominal($post->kredit);
-           
+           $row[]=  "<div class='actions'>
+                                                                <div class='btn-group '>
+                                                                            <a class='btn green-haze btn-outline btn-circle btn-xs' href='javascript:;' data-toggle='dropdown'>
+                                                                                <i class='fa  fa-cogs'></i> Action
+                                                                                <i class='fa fa-angle-down'></i>
+                                                                            </a>
+                                                                            <ul class='dropdown-menu pull-right'>
+                                                                                <li>
+                                                                                    <a href='".site_url('barang/barang_edit/'.$post->source_no)."' id='Editbarang'>
+                                                                                        <i class='fa fa-pencil'></i> Edit </a>
+                                                                                </li>
+                                                                                <li>
+                                                                                    <a href='".site_url('barang/hapus/'.$post->source_no)."' id='hapusbarang'>
+                                                                                        <i class='fa fa-trash-o'></i> Delete </a>
+                                                                                </li>
+                                                                                <li>
+                                                                                    <a href='".site_url('barang/list_stok/'.$post->source_no)."' id='Liststok'>
+                                                                                        <i class='fa fa-eye'></i>View Invoice</a>
+                                                                                </li>
+                                                                               
+                                                                            </ul>
+                                                                        </div>
+                                                                      </div>";
             $data[] = $row;
         }
         

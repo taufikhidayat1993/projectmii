@@ -17,8 +17,7 @@
                             </ul>
                      
 					   </div>
-       <div class="row">
-       
+                        <div class="row">
                             <div class="col-md-12">
                                 <!-- BEGIN EXAMPLE TABLE PORTLET-->
                                 <div class="portlet light bordered">
@@ -55,9 +54,9 @@
                                                    
                                                     <th>Kode Barang</th>
                                                     <th>Nama Barang</th>
-                                                    <th>Satuan</th>
-                                            
-                                                    <th>Account</th>                                                
+                                                    <th>Satuan</th>                                            
+                                                    <th>Account</th> 
+                                                     <th>Stok</th>                                                   
                                                    <th width="10%">ACTION</th>
                                                 </tr>
                                             </thead>
@@ -79,10 +78,9 @@
                     serverSide: true,
                     "columnDefs": [ {
                     "orderable":  false,
-                    "targets": 0,
-            
-             "defaultContent": ""
-         }],
+                    "targets": 0,            
+                    "defaultContent": ""
+                }],
                     "ajax": {
                         "url": "<?php echo base_url('barang/server_side'); ?>",
                         "type": "POST",
@@ -90,8 +88,7 @@
                             data.name_barang = $('#search_name_barang').val();
                             data.<?php echo $this->security->get_csrf_token_name(); ?> = "<?php echo $this->security->get_csrf_hash(); ?>";
                         },
-                    },
-                    
+                    },                    
                 } );
                 $('#search').on( 'click change', function (event) {
                     event.preventDefault();
@@ -103,9 +100,8 @@
                     {
                         table.draw();
                     }
-
                 } );
-        $(document).on('click', '#tambahbarang, #Editbarang', function(e){
+        $(document).on('click', '#tambahbarang, #Editbarang, #Liststok', function(e){
     e.preventDefault();
 
     $('.modal-dialog').removeClass('modal-sm');
@@ -118,6 +114,10 @@
     if($(this).attr('id') == 'tambahbarang'){
     $('.modal-title').html('Tambah barang Baru');
      $('.modal-footer').html("<button type='button'data-dismiss='modal' class='btn dark btn-outline'>Close</button><button type='button' class='btn green'  onClick='tambahbarang()' >Simpan</button>");
+        }
+         if($(this).attr('id') == 'Liststok'){
+    $('.modal-title').html('Histori Stok');
+     $('.modal-footer').html("");
         }
 
     $('.modal-body').load($(this).attr('href'));

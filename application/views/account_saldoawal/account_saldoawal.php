@@ -174,4 +174,6 @@ $(document).on('click', '#hapusaccount', function(e){
         });
     });	
 		    });
+
 		</script>
+          <script src="<?php echo base_url('assets/')?>pages/scripts/table-datatables-scroller.min.js" type="text/javascript"></script>

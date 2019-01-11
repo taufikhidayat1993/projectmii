@@ -4,7 +4,7 @@
 <head>
     <meta http-equiv="content-type" content="text/html;charset=UTF-8" />
     <meta charset="utf-8" />
-    <title>Panggil Tukang |</title>
+    <title>MII ACCOUNTING</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no" />
    <meta name="viewport" content="width=device-width, initial-scale=1">
         <link href="<?php echo base_url('assets/')?>global/plugins/select2/css/select2.min.css" rel="stylesheet" type="text/css" />
@@ -36,6 +36,7 @@
             <link href="<?php echo base_url('assets/')?>css/autocomplete.css" rel="stylesheet" type="text/css" />
         <link href="<?php echo base_url('assets/')?>css/style-gue.css" rel="stylesheet" type="text/css" />
         <link href="<?php echo base_url('assets/')?>css/ui/jquery-ui-1.10.4.custom.min.css" rel="stylesheet" type="text/css" />
+       
     <link href="<?php echo base_url('assets/')?>css/ui/demo_table_jui.css" rel="stylesheet" type="text/css" />
         <link rel="stylesheet" href="<?php echo base_url()?>js/jquery-ui/jquery-ui.css">
            <link href="<?php echo base_url('assets/')?>global/plugins/bootstrap-toastr/toastr.min.css" rel="stylesheet" type="text/css" />
@@ -444,7 +445,10 @@
                           <span class='arrow'></span></a>
                            <ul class="sub-menu">
                             <li class='nav-item' ><a href="<?php echo base_url('purchases/purchase_request')?>">Purchase Request</a></li>
-                            <li><a class='nav-link' href="<?php echo base_url('purchase_order')?>">Purchase Order</a></li>  
+                            <li><a class='nav-link' href="<?php echo base_url('purchase_order')?>">Purchase Order</a></li>
+                             <li>
+                                <a class='nav-link' href="<?php echo base_url('receipt_item')?>">Receive Items</a>
+                            </li>    
                             <li>
                                 <a class='nav-link' href="<?php echo base_url('purchase_invoice')?>">Purchase Invoice</a>
                             </li>  
@@ -476,8 +480,9 @@
             <ul class="sub-menu">    
 <li><a class='nav-link' href="<?php echo base_url('group')?>">Group Account</a></li>    
  <li><a class='nav-link' href="<?php echo base_url('header')?>">Header Account</a></li>                 
-  <li><a class='nav-link' href="<?php echo base_url('account')?>">Account</a></li>         
-   <li><a class='nav-link' href="<?php echo base_url('jurnal_umum')?>">Jurnal Umum</a></li>   
+  <li><a class='nav-link' href="<?php echo base_url('account')?>">Account</a></li>    
+  <li><a class='nav-link' href="<?php echo base_url('Bukti_jurnalumum')?>">Bukti Jurnal Umum</a></li>        
+   <li><a class='nav-link' href="<?php echo base_url('jurnal_umum')?>">Histori Buku Besar</a></li>   
     <li><a class='nav-link' href="<?php echo base_url('account_saldoawal')?>">Saldo Awal</a></li>        
      <li><a class='nav-link' href="<?php echo base_url('buku_bank')?>">Buku Bank</a></li>     
                         </ul>
@@ -537,9 +542,10 @@
         <!-- END CORE PLUGINS -->
         <!-- BEGIN THEME GLOBAL SCRIPTS -->
                  <!-- Jquery Validate -->
+                  
          <script src="<?php echo base_url('assets/')?>global/plugins/bootstrap-toastr/toastr.min.js" type="text/javascript"></script>
         <script src="<?php echo base_url('assets/')?>global/scripts/app.min.js" type="text/javascript"></script>
-           <script src="<?php echo base_url('assets/')?>pages/scripts/table-datatables-scroller.min.js" type="text/javascript"></script
+       
       <script src="<?php echo base_url()?>js/select2.js"></script>
           <!--  <script src="<?php// echo base_url('assets/')?>pages/scripts/ui-modals.min.js" type="text/javascript"></script> -->
         <!-- END THEME GLOBAL SCRIPTS -->

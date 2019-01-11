@@ -1,10 +1,10 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Purchase_invoice extends CI_Controller {
+class Receipt_item extends CI_Controller {
     Public function __construct() { 
         parent::__construct(); 
-    $this->load->model('M_Purchaseinvoice');
+    $this->load->model('M_Receiptitem');
      $this->load->model('Mastermodel');
     $this->load->helper('nominal');
    $this->load->helper('format_tanggal'); 
@@ -12,20 +12,23 @@ class Purchase_invoice extends CI_Controller {
   public function index() 
   {     
 		$data   = array(
-            'content'   => 'purchase_invoice/purchase_invoice'
+            'content'   => 'receipt_item/receipt_item'
         );
 		$this->load->view('container', $data);
   }
    public function add() 
   {     
+    $month=date('m');
+    $year=date('Y');
      $this->load->library('breadcrumb');
        $this->breadcrumb->add('Purchase','')
-            ->add('Purchases Invoice','purchase_invoice')
-            ->add('Add New','purchase_invoice/add');
+            ->add('Receive Item','receipt_item')
+            ->add('Add New','receipt_item/add');
     $data   = array(
-            'content'   => 'purchase_invoice/purchase_invoice_add',
+            'content'   => 'receipt_item/receipt_item_add',
             'account'  =>$this->db->query("select * from account where kode_account='2-110'")->result(),
-            'kode_pi'  =>  $this->M_Purchaseinvoice->buat_kode()
+            'kode_pi'  =>  $this->M_Receiptitem->buat_kode(),
+            'kode_belakang1'  => kode_belakang('MII',''.$month.'',''.$year.'')
         );
 
     $this->load->view('container', $data);
@@ -33,14 +36,14 @@ class Purchase_invoice extends CI_Controller {
     public function list_po($vendor = NULL) 
   {
 if(!empty($vendor)){
-    $data['list'] = $this->M_Purchaseinvoice->list_po($vendor)->result();
-    $this->load->view('purchase_invoice/list_po',$data);
+    $data['list'] = $this->M_Receiptitem->list_po($vendor)->result();
+    $this->load->view('receipt_item/list_po',$data);
 }
   }
      public function get_po($no_po) 
   {
- $data['list'] = $this->M_Purchaseinvoice->detail_po($no_po);
-    $this->load->view('purchase_invoice/data_po',$data);
+ $data['list'] = $this->M_Receiptitem->detail_po($no_po);
+    $this->load->view('receipt_item/data_po',$data);
   }
    public function cari_vendor() 
   {
@@ -61,7 +64,7 @@ $key++;
        echo "hasil kosong";
 }
 }
-public function purchase_invoice_simpan(){
+public function receipt_item_simpan(){
 error_reporting(0);
          $this->load->library('form_validation');                
         $this->form_validation->set_rules('no_pi', 'Nomor Invoice', 'trim|required');    
@@ -79,6 +82,7 @@ error_reporting(0);
      $status_ppn=1;
             }else{
 $status_ppn=0;
+
             }          
                 $data = array (
             'kode_po' => $this->input->post('kode_po'),
@@ -133,20 +137,6 @@ $status_ppn=0;
             'harga'=>$_POST['harga'][$no_array]           
           );
         $this->db->insert('tb_pi_detail',$dataku);
-
- $datastok = array (
-            'source_no' =>  $no_pi,
-            'kode_barang' => $_POST['kode'][$no_array],            
-            'quantity' => $_POST['jumlah_order'][$no_array],
-            'tanggal'   => $tgl_pi,
-            'trans_type' => 'IN',
-            'modiby' => $this->session->userdata('user_id'),
-            'modidate' => date('Y-m-d H:i:s')
-
-          );
-        $this->db->insert('table_stock',$datastok);
-
-
                    }                        
                     $no_array++;
                   }     
@@ -212,7 +202,7 @@ $status_ppn=0;
         }
 
        
-        $posts = $this->M_Purchaseinvoice->get_datatables($from,$to); 
+        $posts = $this->M_Receiptitem->get_datatables($from,$to); 
 
         $data = array();
         $no = $this->input->post('start');
@@ -222,44 +212,20 @@ $status_ppn=0;
             
             $no++;
             $row = array();
-            $row[] = $post->tgl_pi;
-             $row[] = $post->inv_no;
-            $row[] = $post->kode_pi; 
+            $row[] = $post->tgl_po;
+            $row[] = $post->kode_po;          
+            $row[] = $post->kode_pr;
             $row[] = $post->nama_vendor;
-            $row[] = nominal($post->total_pi);             
-            $row[] = "-";
-            $row[] = nominal($post->paid);
-            $row[] ="
-                                                            <div class='actions'>
-                                                                <div class='btn-group '>
-                                                                            <a class='btn green-haze btn-outline btn-circle btn-xs' href='javascript:;' data-toggle='dropdown'>
-                                                                                <i class='fa  fa-cogs'></i> Action
-                                                                                <i class='fa fa-angle-down'></i>
-                                                                            </a>
-                                                                            <ul class='dropdown-menu pull-right'>
-                                                                                <li>
-                                                                                    <a href='".site_url('barang/barang_edit/'.$post->kode_pi)."' id='Editbarang'>
-                                                                                        <i class='fa fa-pencil'></i> Edit </a>
-                                                                                </li>
-                                                                                <li>
-                                                                                    <a href='".site_url('barang/hapus/'.$post->kode_pi)."' id='hapusbarang'>
-                                                                                        <i class='fa fa-trash-o'></i> Delete </a>
-                                                                                </li>
-                                                                                <li>
-                                                                                    <a href='".site_url('barang/list_stok/'.$post->kode_pi)."' id='Liststok'>
-                                                                                        <i class='fa fa-eye'></i>View Invoice</a>
-                                                                                </li>
-                                                                               
-                                                                            </ul>
-                                                                        </div>
-                                                                      </div>";
+          
+            $row[] = nominal($post->total_po);
+             $row[] = "-";
             $data[] = $row;
         }
         
         $output = array(
             "draw" => $this->input->post('draw'),
-            "recordsTotal" => $this->M_Purchaseinvoice->count_all(),
-            "recordsFiltered" => $this->M_Purchaseinvoice->count_filtered($from,$to),
+            "recordsTotal" => $this->M_Receiptitem->count_all(),
+            "recordsFiltered" => $this->M_Receiptitem->count_filtered($from,$to),
             "data" => $data,
         );
         //output to json format

@@ -7,16 +7,15 @@ class M_Purchasepayment extends CI_Model
         parent::__construct();  // call model constructor    
     }
 
-    var $table = 'accjurnaldetail'; 
+    var $table = 'purchase_payment'; 
 
-    var $select = array('accjurnaldetail.*','account.nama_account','accsource.nama_source'); 
+    var $select = array('purchase_payment.*','tb_supplier.nama_vendor'); 
     public function get_datatables($from, $to)
     {
         $this->_get_datatables_query($from, $to);       
         if($_POST['length'] != -1)
             $this->db->limit($_POST['length'], $_POST['start']);        
-        $query = $this->db->get();
-        
+        $query = $this->db->get();        
         return $query->result();
     }
     public function count_filtered($from, $to)
@@ -39,20 +38,18 @@ class M_Purchasepayment extends CI_Model
     {
 
         $this->db
-             ->select($this->select)
-             ->from($this->table)
-			  ->join('accsource', 'accsource.kode_source=accjurnaldetail.source','left')
-               ->join('account', 'accjurnaldetail.kode_account=account.kode_account','left')
+            ->select($this->select)
+            ->from($this->table)
+			->join('tb_supplier', 'tb_supplier.kode_vendor=purchase_payment.kode_vendor','left')            
+            ->order_by('purchase_payment.tanggal','desc');
               
-                ->order_by('accjurnaldetail.source_no','desc')
-                 ->order_by('account.tipe','asc');
               
-                 
         if($from!='' && $to!='' || $from!= NULL) // To process our custom input parameter
         {
 
-            $this->db->where('accjurnaldetail.tgl_po BETWEEN "'. date('Y-m-d', strtotime($from)). '" and "'. date('Y-m-d', strtotime($to)).'"');
+            $this->db->where('purchase_payment.tanggal BETWEEN "'. date('Y-m-d', strtotime($from)). '" and "'. date('Y-m-d', strtotime($to)).'"');
         }
+
     }
 	  public function detail_invoice($kode)
     {

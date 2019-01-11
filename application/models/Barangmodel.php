@@ -31,7 +31,7 @@ class Barangmodel extends CI_Model
     private function _get_datatables_query($name_barang)
     {
         $this->db
-             ->select('kode_barang, id_barang, nama_barang,tb_barang_satuan.nama_satuan,nama_account')
+             ->select('kode_barang,jml_stok,id_barang, nama_barang,tb_barang_satuan.nama_satuan,nama_account')
              ->from($this->table)
              ->join('tb_barang_satuan', 'tb_barang_satuan.id_satuan=tb_barang.satuan','left')
 					 ->join('account', 'account.kode_account=tb_barang.kode_account','left');

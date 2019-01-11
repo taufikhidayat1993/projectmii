@@ -25,18 +25,24 @@
                                     <div class="portlet-title">
                                         <div class="caption font-dark">
                                             <i class="icon-settings font-dark"></i>
-                                            <span class="caption-subject bold uppercase">Daftar Purchase Order
+                                            <span class="caption-subject bold uppercase">Purchase Invoice
                                             </span>
                                         </div>
-                                         <div class="actions">
-                                                <div class="col-md-8">
+                                 
+                                    </div>
+
+                                    <div class="portlet-body">	
+
+                                                <div class="col-md-8" style="padding-left:0px;">
                                                     <div class="input-group">                  
                                                         <span class="input-group-btn">
-                                                             <div class="col-md-6">
-                                                        <div class="input-group input-large date-picker input-daterange" data-date="10/11/2012" data-date-format="dd/mm/yyyy" >
-                                                            <input type="text" class="form-control" id="from" name="from" placeholder="Mulai Tanggal">
+                                                             <div class="col-md-6" style="padding-left:0px;">
+                                                        <div class="input-group input-large date-picker input-daterange" data-date-format="dd/mm/yyyy" >
+                                                            <input type="text" class="form-control"
+value="<?php echo date('01/m/Y'); ?>" 
+                                                             id="from" name="from" placeholder="Mulai Tanggal">
                                                             <span class="input-group-addon"> s:d </span>
-                                                            <input type="text" id="to" class="form-control" name="to" placeholder="Sampai Tanggal"> </div>
+                                                            <input type="text" id="to" class="form-control" name="to" placeholder="Sampai Tanggal"  value="<?php echo date('d/m/Y'); ?>"> </div>
                                                         <!-- /input-group -->
                                                         
                                                     </div>
@@ -49,24 +55,19 @@
                                                  <div class="col-md-4">
    <a href="<?php echo base_url(); ?>purchase_invoice/add" class="btn btn-circle btn-success" id="search" type="button"> <i class="fa fa-plus"></i> Tambah Invoice</a>
                                                  </div>
-
-                                                <!-- /.col-md-6 -->
-                                      
-                                        </div>
-                                    </div>
-                                    <div class="portlet-body">		
-                                    <div id="Notifikasi" style="display: none;"></div>	
+                                            <br>
+                                             <br>
                                         <table class="table table-striped table-bordered table-hover table-checkable order-column sample_1" id="sample_1">
                                             <thead>
                                                 <tr>
                                                    
-                                                    <th>Tg PO</th>
-                                                    <th>No. PO</th>
-                                                    <th>No. Request</th>
+                                                    <th width="15%">Date</th>
+                                                    <th>Invoice No</th>
+                                                    <th>Form No</th>
                                                     <th>Vendor Name</th>
-                                                    <th>Total PO</th>
+                                                    <th>Inv. Amount</th>
+                                                    <th>Down Payment</th>
                                                     <th>Paid Amount</th>
-                                                    <th>Sisa Payment</th>
                                                    
                                                    <th width="10%">ACTION</th>
                                                 </tr>
@@ -82,8 +83,7 @@
                      	<script>
 	
 		    $(document).ready(function () {
-                $("div.dataTables_filter").html("");
-		    	
+                $("div.dataTables_filter").html("");		    	
 		        var table =  $('#sample_1').DataTable( {
 					processing:true,
 					filter: false,
@@ -95,15 +95,14 @@
              "defaultContent": ""
          }],
 					"ajax": {
-						"url": "<?php echo base_url('Purchase_order/server_side'); ?>",
+						"url": "<?php echo base_url('Purchase_invoice/server_side'); ?>",
 						"type": "POST",
 						"data":function(data) {
 							data.from = $('#from').val();
                             data.to = $('#to').val();
 							data.<?php echo $this->security->get_csrf_token_name(); ?> = "<?php echo $this->security->get_csrf_hash(); ?>";
 						},
-					},
-					
+					},					
 				} );
                 $('#search').on( 'click change', function (event) {
                     event.preventDefault();

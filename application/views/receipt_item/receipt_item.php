@@ -24,40 +24,49 @@
                                 <div class="portlet light bordered">
                                     <div class="portlet-title">
                                         <div class="caption font-dark">
-                                            <i class="fa fa-calculator"></i>
-                                            <span class="caption-subject bold uppercase">Jurnal Umum
+                                            <i class="icon-settings font-dark"></i>
+                                            <span class="caption-subject bold uppercase">Daftar Purchase Order
                                             </span>
                                         </div>
-                                    </div>
-                                    <div class="portlet-body">	
-                                        <div class="row">
-                                      <div class="col-md-8" >
+                                         <div class="actions">
+                                                <div class="col-md-8">
                                                     <div class="input-group">                  
                                                         <span class="input-group-btn">
-                                                             <div class="col-md-6" style="padding-left: 0px;">
+                                                             <div class="col-md-6">
                                                         <div class="input-group input-large date-picker input-daterange" data-date="10/11/2012" data-date-format="dd/mm/yyyy" >
-                                                            <input type="text" class="form-control" id="from" name="from" placeholder="Mulai Tanggal" value="<?php echo date('01/m/Y'); ?>" >
+                                                            <input type="text" class="form-control input-sm" id="from" name="from" placeholder="Mulai Tanggal">
                                                             <span class="input-group-addon"> s:d </span>
-                                                            <input type="text" id="to" class="form-control" name="to" placeholder="Sampai Tanggal" value="<?php echo date('d/m/Y'); ?>" > </div>
+                                                            <input type="text" id="to" class="form-control input-sm" name="to" placeholder="Sampai Tanggal"> </div>
+                                                        <!-- /input-group -->
+                                                        
                                                     </div>
-                                                            <button class="btn btn-primary " id="search" type="button">Search</button>  
+                                                            <button class="btn btn-primary " id="search" type="button">Search</button>
+                                                           
                                                         </span>
                                                     </div>
-                                                </div>	
-</div>
-<br>
+                                                    <!-- /input-group -->
+                                                </div>
+                                                 <div class="col-md-4">
+   <a href="<?php echo base_url(); ?>receipt_item/add" class="btn btn-circle btn-success" id="search" type="button"> <i class="fa fa-plus"></i> Add New</a>
+                                                 </div>
+
+                                                <!-- /.col-md-6 -->
+                                      
+                                        </div>
+                                    </div>
+                                    <div class="portlet-body">		
                                     <div id="Notifikasi" style="display: none;"></div>	
                                         <table class="table table-striped table-bordered table-hover table-checkable order-column sample_1" id="sample_1">
                                             <thead>
                                                 <tr>
                                                    
-                                                    <th width="10%">Date</th>
-                                                    <th>Source</th>
-                                                    <th>Source No.</th>
-                                                    <th>Account No</th>
-                                                    <th>Account Name</th>
-                                                    <th>Debet</th>
-                                                    <th>Kredit</th>
+                                                    <th>Tg PO</th>
+                                                    <th>No. PO</th>
+                                                    <th>No. Request</th>
+                                                    <th>Vendor Name</th>
+                                                    <th>Total PO</th>
+                                                    <th>Paid Amount</th>
+                                                    <th>Sisa Payment</th>
                                                    
                                                    <th width="10%">ACTION</th>
                                                 </tr>
@@ -86,7 +95,7 @@
              "defaultContent": ""
          }],
 					"ajax": {
-						"url": "<?php echo base_url('Jurnal_umum/server_side'); ?>",
+						"url": "<?php echo base_url('Purchase_order/server_side'); ?>",
 						"type": "POST",
 						"data":function(data) {
 							data.from = $('#from').val();

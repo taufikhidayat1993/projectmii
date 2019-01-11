@@ -37,9 +37,9 @@
                                                         <span class="input-group-btn">
                                                              <div class="col-md-6">
                                                         <div class="input-group input-large date-picker input-daterange" data-date="10/11/2012" data-date-format="dd/mm/yyyy" >
-                                                            <input type="text" class="form-control" id="from" name="from" placeholder="Mulai Tanggal">
+                                                            <input type="text" class="form-control" id="from" name="from" placeholder="Mulai Tanggal" value="<?php echo date('01/m/Y'); ?>">
                                                             <span class="input-group-addon"> s:d </span>
-                                                            <input type="text" id="to" class="form-control" name="to" placeholder="Sampai Tanggal"> </div>
+                                                            <input type="text" id="to" class="form-control" name="to" placeholder="Sampai Tanggal" value="<?php echo date('d/m/Y'); ?>"> </div>
                                                         <!-- /input-group -->
                                                         
                                                     </div>
@@ -63,15 +63,11 @@
                                             <thead>
                                                 <tr>
                                                    
-                                                    <th>Tg PO</th>
-                                                    <th>No. PO</th>
-                                                    <th>No. Request</th>
+                                                    <th>Payment Date</th>
+                                                    <th>Form No</th>
                                                     <th>Vendor Name</th>
-                                                    <th>Total PO</th>
-                                                    <th>Paid Amount</th>
-                                                    <th>Sisa Payment</th>
+                                                    <th>Ammount</th>
                                                    
-                                                   <th width="10%">ACTION</th>
                                                 </tr>
                                             </thead>
                                            <tbody>
@@ -85,8 +81,7 @@
                      	<script>
 	
 		    $(document).ready(function () {
-                $("div.dataTables_filter").html("");
-		    	
+                $("div.dataTables_filter").html("");		    	
 		        var table =  $('#sample_1').DataTable( {
 					processing:true,
 					filter: false,
@@ -98,7 +93,7 @@
              "defaultContent": ""
          }],
 					"ajax": {
-						"url": "<?php echo base_url('Purchase_order/server_side'); ?>",
+						"url": "<?php echo base_url('Purchase_payment/server_side'); ?>",
 						"type": "POST",
 						"data":function(data) {
 							data.from = $('#from').val();

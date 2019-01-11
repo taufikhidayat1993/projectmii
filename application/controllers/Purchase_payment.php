@@ -5,6 +5,7 @@ class Purchase_payment extends CI_Controller {
     Public function __construct() { 
         parent::__construct(); 
     $this->load->model('M_Purchasepayment');
+     $this->load->model('M_Purchaseorder');
      $this->load->model('Mastermodel');
   $this->load->helper('kode_transaksi');
    $this->load->helper('format_tanggal'); 
@@ -197,16 +198,12 @@ Order by b.nama_account, a.source_no, a.kode_account
   {  
         $from = $this->input->post('from');
         $to = $this->input->post('to');
-
         if($from!='' && $to!='')
         {
             $from = date('Y-m-d',strtotime($from));
             $to = date('Y-m-d',strtotime($to));
-        }
-
-       
+        }       
         $posts = $this->M_Purchasepayment->get_datatables($from,$to); 
-
         $data = array();
         $no = $this->input->post('start');
        
@@ -215,13 +212,10 @@ Order by b.nama_account, a.source_no, a.kode_account
             
             $no++;
             $row = array();
-            $row[] = $post->tgl_po;
-            $row[] = $post->kode_po;          
-            $row[] = $post->kode_pr;
+            $row[] = $post->tanggal;
+            $row[] = $post->form_no;          
             $row[] = $post->nama_vendor;
-          
-            $row[] = nominal($post->total_po);
-             $row[] = "-";
+            $row[] = number_format($post->total_payment);
             $data[] = $row;
         }
         

@@ -1,66 +1,8 @@
 <?php
 class M_barang extends CI_Model 
 {
-	function fetch_data_barang($like_value = NULL, $column_order = NULL, $column_dir = NULL, $limit_start = NULL, $limit_length = NULL)
-	{
-		$sql = "
-			SELECT 
-				(@row:=@row+1) AS nomor, 
-				a.`id_barang`, 
-				a.`kode_barang`, 
-				a.`nama_barang`,
-				a.`size`,
-				IF(a.`total_stok` = 0, 'Kosong', a.`total_stok`) AS total_stok,
-				CONCAT('Rp. ', REPLACE(FORMAT(a.`harga`, 0),',','.') ) AS harga,
-				a.`keterangan`,
-				b.`kategori`,
-				IF(c.`merk` IS NULL, '-', c.`merk` ) AS merk 
-			FROM 
-				`pj_barang` AS a 
-				LEFT JOIN `pj_kategori_barang` AS b ON a.`id_kategori_barang` = b.`id_kategori_barang` 
-				LEFT JOIN `pj_merk_barang` AS c ON a.`id_merk_barang` = c.`id_merk_barang` 
-				, (SELECT @row := 0) r WHERE 1=1 
-				AND a.`dihapus` = 'tidak' 
-		";
-		
-		$data['totalData'] = $this->db->query($sql)->num_rows();
-		
-		if( ! empty($like_value))
-		{
-			$sql .= " AND ( ";    
-			$sql .= "
-				a.`kode_barang` LIKE '%".$this->db->escape_like_str($like_value)."%' 
-				OR a.`nama_barang` LIKE '%".$this->db->escape_like_str($like_value)."%'
-				OR a.`size` LIKE '%".$this->db->escape_like_str($like_value)."%' 
-				OR IF(a.`total_stok` = 0, 'Kosong', a.`total_stok`) LIKE '%".$this->db->escape_like_str($like_value)."%' 
-				OR CONCAT('Rp. ', REPLACE(FORMAT(a.`harga`, 0),',','.') ) LIKE '%".$this->db->escape_like_str($like_value)."%' 
-				OR a.`keterangan` LIKE '%".$this->db->escape_like_str($like_value)."%' 
-				OR b.`kategori` LIKE '%".$this->db->escape_like_str($like_value)."%' 
-				OR c.`merk` LIKE '%".$this->db->escape_like_str($like_value)."%' 
-			";
-			$sql .= " ) ";
-		}
-		
-		$data['totalFiltered']	= $this->db->query($sql)->num_rows();
-		
-		$columns_order_by = array( 
-			0 => 'nomor',
-			1 => 'a.`kode_barang`',
-			2 => 'a.`nama_barang`',
-			3 => 'a.`size`',
-			4 => 'b.`kategori`',
-			5 => 'c.`merk`',
-			6 => 'a.`total_stok`',
-			7 => '`harga`',
-			8 => 'a.`keterangan`'
-		);
-		
-		$sql .= " ORDER BY ".$columns_order_by[$column_order]." ".$column_dir.", nomor ";
-		$sql .= " LIMIT ".$limit_start." ,".$limit_length." ";
-		
-		$data['query'] = $this->db->query($sql);
-		return $data;
-	}
+	
+	
 
 	function hapus_barang($id_barang)
 	{

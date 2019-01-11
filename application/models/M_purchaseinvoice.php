@@ -7,18 +7,23 @@ class M_purchaseinvoice extends CI_Model
         parent::__construct();  // call model constructor    
     }
 function list_po($vendor){
-        $query = $this->db->select('tb_po.*,(total_ppn+total_po) as ammount');
+        $query = $this->db->select('tb_pi2.*,(total_ppn+total_pi) as ammount,(select sum(total_payment) from purchase_payment where no_pi=tb_pi.kode_pi) as paid');
     $query = $this->db->where('status',0);
     $query = $this->db->where('kode_vendor',$vendor);
-return $this->db->get('tb_po');
+return $this->db->get('tb_pi');
 }
 function detail_invoice($no_po){
      $query = $this->db->query("selct * from tb_pi where kode_vendor='".$no_po."'");        
      return $query->result();
 }
+function detail_po($no_po){
+     $query = $this->db->query("select tb_barang.nama_barang,tb_barang.kode_account,tb_barang_satuan.nama_satuan,tb_detail_po.* from tb_detail_po left join tb_barang on tb_barang.kode_barang=tb_detail_po.kode_barang left join tb_barang_satuan on tb_detail_po.satuan= tb_barang_satuan.id_satuan where 
+        tb_detail_po.kode_po='".$no_po."'");        
+     return $query->result();
+}
     var $table = 'tb_pi'; 
 
-    var $select = array('tb_pi.*','tb_supplier.nama_vendor'); //specify the columns you want to fetch from table
+    var $select = array('tb_pi.*','tb_supplier.nama_vendor','(total_ppn+total_pi) as ammount','(select sum(total_payment) from purchase_payment where no_pi=tb_pi.kode_pi) as paid'); //specify the columns you want to fetch from table
  // var $column_order = array('no_faktur','tgl_beli','nama_kasir','tb_pembelian.timestmp'); //set column field database for datatable orderable
 //  var $column_search = array('no_faktur','tgl_beli','nama_kasir','tb_pembelian.timestmp'); //set column field database for datatable searchable
    
@@ -53,11 +58,11 @@ function detail_invoice($no_po){
         $this->db
              ->select($this->select)
              ->from($this->table)
-			  ->join('tb_supplier', 'tb_pi.kode_vendor=tb_supplier.kode_vendor','left');
+			 ->join('tb_supplier', 'tb_pi.kode_vendor=tb_supplier.kode_vendor','left');
         if($from!='' && $to!='' || $from!= NULL) // To process our custom input parameter
         {
 
-            $this->db->where('tb_pi.tgl_po BETWEEN "'. date('Y-m-d', strtotime($from)). '" and "'. date('Y-m-d', strtotime($to)).'"');
+            $this->db->where('tb_pi.tgl_pi BETWEEN "'. date('Y-m-d', strtotime($from)). '" and "'. date('Y-m-d', strtotime($to)).'"');
         }
     }
 	  public function detail_pr($kode)

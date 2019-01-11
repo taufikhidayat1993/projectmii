@@ -1,0 +1,138 @@
+create table items (
+  id   int auto_increment not null,
+  code varchar(50) not null,
+  name varchar(200) not null,
+  primary key (id),
+  constraint ak_items unique key (code)
+);
+
+-- tabel transaksi barang masuk
+create table items_incoming (
+  id   int auto_increment not null,
+  trans_num varchar(50) not null,
+  trans_date datetime not null,
+  item_id int not null,
+  quantity decimal(15,2) default 0,
+  remarks varchar(500) null,
+  primary key (id),
+  constraint fk_items_incoming_items 
+    foreign key (item_id) references items(id) 
+    on delete restrict on update cascade
+);
+
+-- tabel transaksi barang keluar
+create table items_outgoing (
+  id   int auto_increment not null,
+  trans_num varchar(50) not null,
+  trans_date datetime not null,
+  item_id int not null,
+  quantity decimal(15,2) default 0,
+  remarks varchar(500) null,
+  primary key (id),
+  constraint fk_items_outgoing_items 
+    foreign key (item_id) references items(id) 
+    on delete restrict on update cascade
+);
+
+-- sample data barang
+insert into items (code, name) values ('XMI4I', 'Siaomay Note Mi4i');
+insert into items (code, name) values ('IPN6S', 'IPhine 6S Minus');
+insert into items (code, name) values ('SAM7N', 'Slamdung Note 7+');
+
+-- sample data barang masuk
+insert into items_incoming (trans_num,trans_date,item_id,quantity,remarks)
+  values ('IN.001', '2016-01-10', 1, 20, 'Pembelian PURCH.001');
+insert into items_incoming (trans_num,trans_date,item_id,quantity,remarks)
+  values ('IN.001', '2016-01-10', 2, 30, 'Pembelian PURCH.001');
+insert into items_incoming (trans_num,trans_date,item_id,quantity,remarks)
+  values ('IN.002', '2016-01-15', 1, 10, 'Pembelian PURCH.002');
+insert into items_incoming (trans_num,trans_date,item_id,quantity,remarks)
+  values ('IN.002', '2016-01-15', 2, 15, 'Pembelian PURCH.002');
+insert into items_incoming (trans_num,trans_date,item_id,quantity,remarks)
+  values ('IN.002', '2016-01-15', 3, 20, 'Pembelian PURCH.002');
+insert into items_incoming (trans_num,trans_date,item_id,quantity,remarks)
+  values ('IN.003', '2016-01-17', 3, 25, 'Pembelian PURCH.003');
+
+-- sample data barang keluar
+insert into items_outgoing (trans_num,trans_date,item_id,quantity,remarks)
+  values ('OUT.001', '2016-01-12', 1, 2, 'Penjualan INV.001');
+insert into items_outgoing (trans_num,trans_date,item_id,quantity,remarks)
+  values ('OUT.002', '2016-01-13', 2, 3, 'Penjualan INV.002');
+insert into items_outgoing (trans_num,trans_date,item_id,quantity,remarks)
+  values ('OUT.003', '2016-01-14', 1, 1, 'Penjualan INV.003');
+insert into items_outgoing (trans_num,trans_date,item_id,quantity,remarks)
+  values ('OUT.004', '2016-01-15', 2, 5, 'Penjualan INV.004');
+insert into items_outgoing (trans_num,trans_date,item_id,quantity,remarks)
+  values ('OUT.005', '2016-01-16', 3, 2, 'Penjualan INV.005');
+insert into items_outgoing (trans_num,trans_date,item_id,quantity,remarks)
+  values ('OUT.006', '2016-01-17', 3, 2, 'Penjualan INV.006');
+insert into items_outgoing (trans_num,trans_date,item_id,quantity,remarks)
+  values ('OUT.007', '2016-01-18', 2, 2, 'Penjualan INV.007');
+insert into items_outgoing (trans_num,trans_date,item_id,quantity,remarks)
+  values ('OUT.008', '2016-01-19', 2, 3, 'Penjualan INV.008');
+insert into items_outgoing (trans_num,trans_date,item_id,quantity,remarks)
+  values ('OUT.009', '2016-01-20', 1, 1, 'Penjualan INV.009');
+insert into items_outgoing (trans_num,trans_date,item_id,quantity,remarks)
+  values ('OUT.010', '2016-01-21', 2, 3, 'Penjualan INV.010');
+insert into items_outgoing (trans_num,trans_date,item_id,quantity,remarks)
+  values ('OUT.011', '2016-01-22', 3, 2, 'Penjualan INV.011');
+insert into items_outgoing (trans_num,trans_date,item_id,quantity,remarks)
+  values ('OUT.012', '2016-01-23', 3, 2, 'Penjualan INV.012');
+  
+-- solusi: langkah pertama
+-- gabungkan table barang masuk dan barang keluar
+-- tambahkan computed field trans_type untuk membedakan jenis transaksi
+-- perhatikan bahwa klausa where di barang masuk dan keluar harus sama
+select id, 'Masuk' trans_type
+, trans_num, trans_date, item_id, quantity
+from items_incoming 
+where item_id = 2
+union all
+select id, 'Keluar' trans_type
+, trans_num, trans_date, item_id, -quantity
+from items_outgoing
+where item_id = 2
+
+-- solusi: langkah kedua
+-- hitung saldo transaksi menggunakan variable @saldo
+-- jangan lupa urutkan transaksi berdasarkan tanggal
+select *, @saldo := @saldo+quantity as saldo
+from (
+	select id, 'Masuk' trans_type
+	, trans_num, trans_date, item_id, quantity
+	from items_incoming 
+	where item_id = 2
+	union all
+	select id, 'Keluar' trans_type
+	, trans_num, trans_date, item_id, -quantity
+	from items_outgoing
+	where item_id = 2
+) tx
+join ( select @saldo:=0 ) sx on 1=1
+order by trans_date, trans_num;
+
+-- solusi: langkah terakhir
+-- akhirnya JOIN dengan table barang (items)
+-- untuk mendapatkan detil informasi barang
+select a.id item_id, a.code item_code
+, a.name item_name, a.code item_code
+, mx.id trans_id, trans_num, trans_type, trans_date
+, quantity, saldo
+from items a
+join (
+   select *, @saldo := @saldo+quantity as saldo
+   from (
+      select id, 'Masuk' trans_type
+      , trans_num, trans_date, item_id, quantity
+      from items_incoming 
+      where item_id = 2
+      union all
+      select id, 'Keluar' trans_type
+      , trans_num, trans_date, item_id, -quantity
+      from items_outgoing
+      where item_id = 2
+   ) tx
+   join ( select @saldo:=0 ) sx on 1=1
+   order by trans_date, trans_num
+) mx on a.id = mx.item_id
+order by trans_date, trans_num;
