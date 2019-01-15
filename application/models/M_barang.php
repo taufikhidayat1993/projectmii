@@ -88,7 +88,7 @@ class M_barang extends CI_Model
 
 		$sql = "
 			SELECT 
-				`kode_barang`, `nama_barang`,`satuan`,`nama_satuan`
+				`kode_barang`, `nama_barang`,`satuan`,`nama_satuan`,harga_jual
 			FROM 
 				tb_barang left join tb_barang_satuan on tb_barang.satuan=tb_barang_satuan.id_satuan
 			WHERE 

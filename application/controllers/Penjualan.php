@@ -37,6 +37,8 @@ class Penjualan extends CI_Controller
 							<span id='barangnya'>".$b->nama_barang."</span>
 							<span id='nama_satuan' style='display:none;'>".$b->nama_satuan."</span>
 							<span id='satuan_id' style='display:none;'>".$b->satuan."</span>
+							<span id='harga_jual' style='display:none;'>".$b->harga_jual."</span>
+
 							
 						</li>
 					";

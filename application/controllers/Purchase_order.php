@@ -55,7 +55,6 @@ $key++;
    echo json_encode($list);
   
 }else{
-
        echo "hasil kosong";
 }
 }
@@ -198,8 +197,7 @@ Order by b.nama_account, a.source_no, a.kode_account
 
         $data = array();
         $no = $this->input->post('start');
-       
-           foreach ($posts as $post) 
+      foreach ($posts as $post) 
         {   
             
             $no++;

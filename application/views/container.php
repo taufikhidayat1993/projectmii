@@ -456,6 +456,20 @@
                         </ul>
                     </li>
                     <li class="nav-item ">
+                        <a  class='nav-link nav-toggle' href="javascript:;"><span class="title">Sales</span><span class='title'></span>
+                          <span class='arrow'></span></a>
+                           <ul class="sub-menu">
+                            <li class='nav-item' ><a href="<?php echo base_url('sales/sales_quotations')?>">Sales Quotations</a></li>
+                            <li><a class='nav-link' href="<?php echo base_url('purchase_order')?>">Sales Order</a></li>
+                             <li>
+                                <a class='nav-link' href="<?php echo base_url('receipt_item')?>">Delivery Order</a>
+                            </li>    
+                    <li><a class='nav-link' href="<?php echo base_url('purchase_invoice')?>">Sales Invoice</a>
+                          </li>  
+                          <li><a class='nav-link' href="<?php echo base_url('purchase_payment')?>">Sales Receipt</a></li>                           
+                        </ul>
+                    </li>
+                    <li class="nav-item ">
                         <a  class='nav-link nav-toggle' href="javascript:;"><span class="title">Warehouse</span><span class='title'></span>
                           <span class='arrow'></span></a>
             <ul class="sub-menu">
