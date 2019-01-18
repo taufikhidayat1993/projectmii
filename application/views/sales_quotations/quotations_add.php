@@ -2,7 +2,7 @@
 <div class="page-bar">
   <?php echo $this->breadcrumb->show() ?>                     
 					   </div>
-                <form class="form-horizontal" id="form_add_pelanggan" action="<?php echo site_url('purchase_order/purchase_order_simpan'); ?>" method="post">
+                <form class="form-horizontal" id="form_add_pelanggan" action="<?php echo site_url('sales/sales_quotations/simpan'); ?>" method="post">
 					      <div class="row">
 
                                                                <div class="portlet-body form">
@@ -12,7 +12,7 @@
                                                             <div class="form-group">
                                                                 <label class="col-md-3 control-label">Order By</label>
                                                                 <div class="col-md-9">
-                                                                    <select  class='form-control select2 akun' name="vendor" id="costumer">
+                                                                    <select  class='form-control select2 akun' name="costumer" id="costumer">
                                                                       <option value="">Cari Nama Costumer</option>
                                                              </select>
                                                                 </div>
@@ -67,8 +67,10 @@
                                                         
                                                      
                                                     </div>
-                                                        </form>
+                                                   
                                                   </div>
+                                                </form>
+                                           
 					   <div class='row'>
 					   	<div class='col-md-12'>
 				 <div class="portlet">
@@ -92,8 +94,9 @@
 
 						<tbody id="data_item">
 
-						</tbody>
-						
+	
+  					</tbody>
+
 					</table>
 				
 
@@ -105,14 +108,14 @@
 				
 
 				</div>
-        
+      
 				 <div class='row'>
-				 
+<form id="rekapan" class="form-horizontal">
 				 <div class='col-md-12'>
 				   <div class='portlet light'>
                                     <div class='portlet-body form'>
 									
-									<form action="<?php echo base_url();?>purchase_order/purchase_order_simpan" class="form-horizontal"  method="post" id="form_sample_1"  accept-charset="utf-8">
+							
 									<div class='form-body'>
 									<div class="row">
                     <div class='col-md-6'>
@@ -127,7 +130,7 @@
         <div class='form-group'>
                 <label class='col-md-3 control-label'>Biaya Pengiriman</label>
             <div class='col-md-9'>
-            <input type="text" class="form-control input-sm">                        
+            <input type="text" class="form-control input-sm" name="biaya_pengiriman" id="biaya_pengiriman">                        
             </div>
         </div>
         <div class='form-group'>
@@ -138,18 +141,8 @@
         </div>
   
                       </div>
-									 <div class='col-md-6'>
-        <div class='form-group'>
-            <label class='col-md-3 control-label'>PPN 10 %</label>
-                <div class='col-md-9'>
-                <div class="input-group input-medium">		
-<span class="input-group-addon">
-                                                            <input type="checkbox" name="cek_ppn" id="cek_ppn" checked> </span>
-                  <input type='text'  id="ppn" name="ppn"  class='form-control input-medium' disabled>
-                  <input type='hidden'  id="ppn2" name="ppn2"  class='form-control input-medium'>
-                </div>
-				 </div>
-         </div>
+									 <div class='col-md-6' >
+        
         <div class='form-group'>
                 <label class='col-md-3 control-label'>Subtotal
                                    </label>
@@ -158,20 +151,49 @@
                   <span id="TotalSubtotal" class="form-control-static"></span>
             </div>
         </div>
+       
          <div class='form-group'>
-                <label class='col-md-3 control-label'>Total Payment
-                                   </label>
+            <label class='col-md-3 control-label'>Diskon :</label>
+                <div class='col-md-6'> 
+                  <div class="input-group input-group-sm " >
+                                                            <input type="text" class="form-control input-xsmall"
+                                                             name="diskon_persen" id="diskon_persen" >
+                                                            <span class="input-group-addon input-small"> % = </span>
+                                                            <input type="text" class="form-control input-small" name="total_diskon"
+ id="total_diskon"
+                                                            "> </div>
+                                                        <!-- /input-group -->
+                                                       
+                                                    </div>
+                                                        <!-- /input-group -->                            
+                                                
+                                                     
+                                                           
+                                                     
+                                                
+        
+                 
+         </div>
+    <div class='form-group'>
+            <label class='col-md-3 control-label'>PPN 10 %</label>
+                <div class='col-md-9'>
+                <div class="input-group input-group-sm input-medium input-small">    
+<span class="input-group-addon">
+                                                            <input type="checkbox" name="cek_ppn" id="cek_ppn" checked> </span>
+                  <input type='text'  id="ppn" name="ppn"  class='form-control input-medium input-sm' disabled>
+                  <input type='hidden'  id="ppn2" name="ppn2"  class='form-control input-medium'>
+                </div>
+         </div>
+         </div>
+         <div class='form-group'>
+                <label class='col-md-3 control-label'>Total Invoice
+               </label>
                       <div class='col-md-9'>
        <input type='hidden'  id="TotalBayarHidden" name="pr_no"  class='form-control'>
                   <span id="TotalBayar" class="form-control-static"></span>
 				 </div>
             </div>
-        </div>
-
-  
-										
-		
-											</div>
+        </div>				</div>
 											</div>
 											<div class='form-actions'>
 											<div class='row'>
@@ -179,7 +201,11 @@
 											</div>
 											</div>
 										</div>
-									
+                  </div>
+                </div>
+              </form>
+              </div>
+									  
 					</div>
 				
 					
@@ -203,8 +229,7 @@ $(document).ready(function(){
 	});
  quote_no();
 	$("#data_item").find('input[type=text],textarea,select').filter(':visible:first').focus();
-$(document).on('click', '#cari_request, #Editheader', function(e){
-   
+$(document).on('click', '#cari_request, #Editheader', function(e){   
     e.preventDefault();
     $('.modal-dialog').removeClass('modal-sm');
     $('.modal-dialog').removeClass('modal-lg');
@@ -275,7 +300,7 @@ function BarisBaru()
 	var Nomor = $('#data_item tr').length + 1;
 	var Baris = "<tr>";
      	Baris += "<td>";
-			Baris += " <input type='text' class='form-control input-sm' name='kode_barang' id='kode_barang' placeholder='Ketik Kode / Nama Barang'></div>";
+			Baris += " <input type='text' class='form-control input-sm' name='kode_barang' id='kode_barang' placeholder='Ketik Kode / Nama Barang' autocomplete='off'></div>";
 			Baris += "<div id='hasil_pencarian'>";
 		Baris += "</td>";
       Baris += "<td><input type='text' class='form-control input-sm input-xsmall' name='kode[]' id='kode' readonly></td>";
@@ -292,24 +317,12 @@ function BarisBaru()
 	});
 }
 
-$(document).on('click', '#HapusBaris', function(e){
-	e.preventDefault();
-	$(this).parent().parent().remove();
 
-	var Nomor = 1;
-	$('#data_item tr').each(function(){
-		$(this).find('td:nth-child(1)').html(Nomor);
-		Nomor++;
-	});
-
-	HitungTotalBayar();
-});
 
 function AutoCompleteGue(Lebar, KataKunci, Indexnya)
 {
 	$('div#hasil_pencarian').hide();
 	var Lebar = Lebar + 25;
-
 	var Registered = '';
 	$('#data_item tr').each(function(){
 		if(Indexnya !== $(this).index())
@@ -341,7 +354,6 @@ function AutoCompleteGue(Lebar, KataKunci, Indexnya)
 
 	HitungTotalBayar();
 }
-
 $(document).on('keydown', '#kode_barang', function(e){		
 	if($("#kode_barang").val() !== '')
 	{
@@ -390,6 +402,10 @@ Field.find('input').val(NamaBarang);
 	$('#data_item tr:eq('+indexnya+') td:nth-child(2) input').val(kodenya);
   $('#data_item tr:eq('+indexnya+') td:nth-child(4) span').html(nama_satuan);
   $('#data_item tr:eq('+indexnya+') td:nth-child(1) input').val(NamaBarang);
+  $('#data_item tr:eq('+indexnya+') td:nth-child(7) input').val(Harga_jual);
+  $('#data_item tr:eq('+indexnya+') td:nth-child(7) input').html(to_rupiah(Harga_jual));
+
+
 var IndexIni = $(this).parent().parent().index() + 1;
 var TotalIndex = $('#data_item tr').length;	
 	if(IndexIni == TotalIndex){
@@ -431,17 +447,21 @@ var TotalIndex = $('#data_item tr').length;
 });
 
 $(document).on('click', '#daftar-autocomplete li', function(){
-	$(this).parent().parent().parent().find('input').val($(this).find('span#barangnya').html());		
-	var Indexnya = $(this).parent().parent().parent().parent().index();
-		var kodenya = $(this).find('span#kodenya').html();
-	var NamaBarang = $(this).find('span#barangnya').html();
-	var harga_jual = $(this).find('span#harga_jual').html();
+        $(this).parent().parent().parent().find('input').val($(this).find('span#barangnya').html());		
+	        var Indexnya = $(this).parent().parent().parent().parent().index();
+	      	var kodenya = $(this).find('span#kodenya').html();
+	        var NamaBarang = $(this).find('span#barangnya').html();
+	        var harga_jual = $(this).find('span#harga_jual').html();
 $('#data_item tr:eq('+Indexnya+') td:nth-child(1)').find('div#hasil_pencarian').hide();
-$('#data_item tr:eq('+Indexnya+') td:nth-child(3) input').val(kodenya);
-$('#data_item tr:eq('+Indexnya+') td:nth-child(4) input').val(Harga_jual);
-$('#data_item tr:eq('+Indexnya+') td:nth-child(6) input').val($(this).find('span#satuan_id').html());
+$('#data_item tr:eq('+Indexnya+') td:nth-child(7) input').html(harga_jual);
+$('#data_item tr:eq('+Indexnya+') td:nth-child(7) span').html(to_rupiah(harga_jual));
+$('#data_item tr:eq('+Indexnya+') td:nth-child(2) input').val(kodenya);
+$('#data_item tr:eq('+Indexnya+') td:nth-child(3) input').removeAttr('disabled').val('1');
+$('#data_item tr:eq('+Indexnya+') td:nth-child(6) input').removeAttr('disabled').val('0')
+$('#data_item tr:eq('+Indexnya+') td:nth-child(5) input').removeAttr('disabled').val(harga_jual);
+$('#data_item tr:eq('+Indexnya+') td:nth-child(4) input').val($(this).find('span#satuan_id').html());
+$('#data_item tr:eq('+Indexnya+') td:nth-child(4) span').html($(this).find('span#nama_satuan').html());
 
-$('#data_item tr:eq('+Indexnya+') td:nth-child(6) span').html($(this).find('span#nama_satuan').html());
 	var IndexIni = Indexnya + 1;
 	var TotalIndex = $('#data_item tr').length;
 	if(IndexIni == TotalIndex){
@@ -454,13 +474,14 @@ $('#data_item tr:eq('+Indexnya+') td:nth-child(6) span').html($(this).find('span
 	HitungTotalBayar();
 });
 
-$(document).on('keyup', '#unit_price, #qty, #diskon', function(){
+$(document).on('keyup', '#unit_price, #qty, #diskon, #diskon_persen', function(){
 	var Indexnya = $(this).parent().parent().index();
 	var qty = $('#data_item tr:eq('+Indexnya+') td:nth-child(3) input').val();
 	var unit_price = $('#data_item tr:eq('+Indexnya+') td:nth-child(5) input').val();
   var diskon = $('#data_item tr:eq('+Indexnya+') td:nth-child(6) input').val();
     var SubTotal = parseInt(qty) * parseInt(unit_price);
     var tot_diskon=SubTotal*(diskon/100);
+   
 				if(SubTotal > 0){
 					var SubTotalVal = SubTotal-tot_diskon;
 					SubTotal = to_rupiah(SubTotal-tot_diskon);
@@ -468,8 +489,8 @@ $(document).on('keyup', '#unit_price, #qty, #diskon', function(){
 					SubTotal = '';
 					var SubTotalVal = 0;
 				}
-
-				$('#data_item tr:eq('+Indexnya+') td:nth-child(7) input').val(SubTotalVal);
+        var total_diskon= SubTotalVal*(total_diskon/100); 
+    		$('#data_item tr:eq('+Indexnya+') td:nth-child(7) input').val(SubTotalVal);
 				$('#data_item tr:eq('+Indexnya+') td:nth-child(7) span').html(SubTotal);
 				
 		HitungTotalBayar();	
@@ -511,24 +532,25 @@ function to_rupiah(angka){
 function HitungTotalBayar()
 {
  var ppn = document.getElementById("cek_ppn");
+ var diskon_persen=$("#diskon_persen").val()/100;
+ var Total = 0;
 
-	var Total = 0;
- 
 	$('#data_item tr').each(function(){
 		if($(this).find('td:nth-child(7) input').val() > 0)
 		{
 			var SubTotal = $(this).find('td:nth-child(7) input').val();
-			Total = parseInt(Total) + parseInt(SubTotal);
+			Total = parseInt(Total) + parseInt(SubTotal)+parseInt(SubTotal);
 		}
 	});
     if (ppn.checked == true){
-   var total_ppn=parseInt(Total)*0.1;
-  var Totalnya=parseInt(Total)+(parseInt(Total)*0.1);
+   var total_ppn=parseInt(Total-(Total*diskon_persen))*0.1;
+  var Totalnya=parseInt(Total)-parseInt(Total*diskon_persen)+(parseInt(total_ppn));
   } else {
        var total_ppn=0;
   var Totalnya=parseInt(Total);
   }
 
+  $('#total_diskon').val(Total*diskon_persen);
 	$('#TotalBayar').html(to_rupiah(Totalnya));
   $('#ppn').val(to_rupiah(total_ppn));
   $('#ppn2').val(total_ppn);
@@ -540,17 +562,18 @@ function HitungTotalBayar()
 function SimpanTransaksi()
 {
 
-	var FormData =$('#form_add_pelanggan').serialize();     
+	var FormData = $('#form_add_pelanggan').serialize();  
+      FormData += "&" +$('#data_item input').serialize();   
+      FormData += "&" +$('#rekapan').serialize();   
 	$.ajax({
-		url: "<?php echo site_url('purchase_order/purchase_order_simpan'); ?>",
+		url: "<?php echo site_url('sales/sales_quotations/simpan'); ?>",
 		type: "POST",
 		cache: false,
 		data: FormData,
 		dataType:'json',
 		success: function(response){
 	if(response.success == true) {
-				alert("jjjj");
-				
+			      var $toast = toastr['success']('Proses Transaksi Berhasil Disimpan');				
 			}
 			else 
 			{

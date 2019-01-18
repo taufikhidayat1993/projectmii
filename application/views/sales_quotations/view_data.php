@@ -23,9 +23,9 @@
                                                         <span class="input-group-btn">
                                                              <div class="col-md-4">
                                                         <div class="input-group input-large date-picker input-daterange" data-date="10/11/2012" data-date-format="dd/mm/yyyy" >
-                                                            <input type="text" class="form-control" id="from" name="from" placeholder="Mulai Tanggal">
+                                                            <input value="<?php echo date('01/m/Y'); ?>"type="text" class="form-control" id="from" name="from" placeholder="Mulai Tanggal">
                                                             <span class="input-group-addon"> s:d </span>
-                                                            <input type="text" id="to" class="form-control" name="to" placeholder="Sampai Tanggal"> </div>
+                                                            <input type="text" value="<?php echo date('d/m/Y'); ?>" id="to" class="form-control" name="to" placeholder="Sampai Tanggal"> </div>
                                                         <!-- /input-group -->
                                                         
                                                     </div>
@@ -83,7 +83,7 @@
              "defaultContent": ""
          }],
 					"ajax": {
-						"url": "<?php echo base_url('Purchase_order/server_side'); ?>",
+						"url": "<?php echo base_url('sales/sales_quotations/server_side'); ?>",
 						"type": "POST",
 						"data":function(data) {
 							data.from = $('#from').val();

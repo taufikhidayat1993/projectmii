@@ -116,9 +116,22 @@
             return $tanggal.'-'.$bulan.'-'.$tahun;
         }
     }
+  
 	 if ( ! function_exists('shortdate_uki'))
     {
         function shortdate_uki($tgl)
+        {
+ 
+            $pecah = explode("/",$tgl);
+            $tanggal = $pecah[0];
+            $bulan = short_bulan($pecah[1]);
+            $tahun = $pecah[2];
+            return $tahun.'-'.$bulan.'-'.$tanggal;
+        }
+    }
+     if ( ! function_exists('ymd'))
+    {
+        function ymd($tgl)
         {
  
             $pecah = explode("/",$tgl);
